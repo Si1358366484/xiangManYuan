@@ -19,8 +19,32 @@
     </div>
 
     <!-- 右侧内容容器 -->
-    <div class="content-container">
-      <router-view />
+    <div class="content-wrapper">
+      <!-- 顶部栏 -->
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <div class="search-box">
+            <input 
+              type="text" 
+              placeholder="搜索..." 
+              class="search-input"
+              v-model="searchText"
+            />
+            <span class="search-icon">🔍</span>
+          </div>
+        </div>
+        <div class="top-bar-right">
+          <div class="user-info">
+            <img :src="logoIcon" alt="头像" class="avatar" />
+            <span class="username">管理员</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 主内容区域 -->
+      <div class="content-container">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
@@ -31,6 +55,9 @@ import { useRoute } from 'vue-router'
 import logoIcon from '@/assets/images/icon.png'
 
 const route = useRoute()
+
+// 搜索文本
+const searchText = ref('')
 
 // 菜单项配置
 const menuItems = ref([
@@ -120,6 +147,107 @@ const menuItems = ref([
   font-weight: 600;
 }
 
+/* 右侧内容包装器 */
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* 顶部栏样式 */
+.top-bar {
+  height: 50px;
+  background-color: #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.top-bar-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.search-box {
+  position: relative;
+  width: 300px;
+  max-width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 40px 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 18px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.search-input:focus {
+  border-color: #ffd700;
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.user-info:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.username {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
 /* 右侧内容容器样式 */
 .content-container {
   flex: 1;
@@ -153,6 +281,18 @@ const menuItems = ref([
   .menu-item {
     margin-bottom: 0;
     white-space: nowrap;
+  }
+  
+  .top-bar {
+    padding: 0 15px;
+  }
+  
+  .search-box {
+    width: 200px;
+  }
+  
+  .username {
+    display: none;
   }
 }
 </style>
