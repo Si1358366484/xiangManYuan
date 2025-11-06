@@ -69,7 +69,7 @@ const isMenuCollapsed = ref(true)
 
 // 菜单项配置
 const menuItems = ref([
-  { label: '桌台管理', path: '/home' },
+  { label: '首页', path: '/home' },
   { label: '员工管理', path: '/employees' },
   { label: '优惠管理', path: '/promotions' }
   // 后续可以添加更多菜单项
@@ -83,7 +83,7 @@ const toggleMenu = () => {
 // 获取当前选中的菜单项标签
 const currentMenuLabel = computed(() => {
   const currentItem = menuItems.value.find(item => item.path === route.path)
-  return currentItem ? currentItem.label : '首页'
+  return currentItem.label
 })
 </script>
 
