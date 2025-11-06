@@ -1,7 +1,7 @@
 <template>
   <div class="layout-container">
     <!-- 左侧菜单 -->
-    <div class="sidebar">
+    <div class="sidebar" :class="{ collapsed: isMenuCollapsed }">
       <div class="menu-header">
         <img :src="logoIcon" alt="Logo" class="logo" />
         <h3>香满园火锅店</h3>
@@ -23,6 +23,11 @@
       <!-- 顶部栏 -->
       <div class="top-bar">
         <div class="top-bar-left">
+          <!-- 菜单切换按钮 -->
+          <div class="menu-toggle" @click="toggleMenu">
+            <span class="toggle-icon">{{ isMenuCollapsed ? '→' : '←' }}</span>
+            <span v-if="isMenuCollapsed" class="current-menu-label">{{ currentMenuLabel }}</span>
+          </div>
           <div class="search-box">
             <input 
               type="text" 
@@ -50,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import logoIcon from '@/assets/images/icon.png'
 
@@ -59,6 +64,9 @@ const route = useRoute()
 // 搜索文本
 const searchText = ref('')
 
+// 菜单折叠状态
+const isMenuCollapsed = ref(true)
+
 // 菜单项配置
 const menuItems = ref([
   { label: '桌台管理', path: '/home' },
@@ -66,6 +74,17 @@ const menuItems = ref([
   { label: '优惠管理', path: '/promotions' }
   // 后续可以添加更多菜单项
 ])
+
+// 切换菜单显示/隐藏
+const toggleMenu = () => {
+  isMenuCollapsed.value = !isMenuCollapsed.value
+}
+
+// 获取当前选中的菜单项标签
+const currentMenuLabel = computed(() => {
+  const currentItem = menuItems.value.find(item => item.path === route.path)
+  return currentItem ? currentItem.label : '首页'
+})
 </script>
 
 <style scoped>
@@ -81,13 +100,21 @@ const menuItems = ref([
   width: 200px;
   background-color: #2a2a2a;
   border-radius: 0;
-  padding: 20px;
+  padding: 0;
   margin: 0;
   box-sizing: border-box;
   flex-shrink: 0;
   height: 100vh;
   display: flex;
   flex-direction: column;
+  transition: transform 0.3s ease, width 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  transform: translateX(-100%);
+  width: 0;
+  padding: 0;
 }
 
 .menu-header {
@@ -95,14 +122,17 @@ const menuItems = ref([
   align-items: center;
   gap: 12px;
   text-align: left;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
+  height: 50px;
+  padding: 0 20px;
+  margin: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .logo {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   object-fit: cover;
   border-radius: 50%;
   flex-shrink: 0;
@@ -110,7 +140,7 @@ const menuItems = ref([
 
 .menu-header h3 {
   color: #ffffff;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   margin: 0;
   white-space: nowrap;
@@ -120,6 +150,8 @@ const menuItems = ref([
   display: flex;
   flex-direction: column;
   flex: 1;
+  padding: 20px 0;
+  overflow-y: auto;
 }
 
 .menu-item {
@@ -173,6 +205,44 @@ const menuItems = ref([
   flex: 1;
   display: flex;
   align-items: center;
+  gap: 16px;
+}
+
+/* 菜单切换按钮 */
+.menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 12px;
+  background-color: #4a4a4a;
+  border-radius: 0 16px 16px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  margin-left: -20px;
+  min-width: 40px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.menu-toggle:hover {
+  background-color: #5a5a5a;
+}
+
+.toggle-icon {
+  font-size: 18px;
+  color: #ffffff;
+  font-weight: bold;
+  display: inline-block;
+  text-align: center;
+  line-height: 1;
+}
+
+.current-menu-label {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
 }
 
 .search-box {
