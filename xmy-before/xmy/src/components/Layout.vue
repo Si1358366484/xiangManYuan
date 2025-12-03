@@ -25,7 +25,12 @@
         <div class="top-bar-left">
           <!-- 菜单切换按钮 -->
           <div class="menu-toggle" @click="toggleMenu">
-            <span class="toggle-icon">{{ isMenuCollapsed ? '→' : '←' }}</span>
+            <img 
+              :src="arrowsIcon" 
+              alt="菜单切换" 
+              class="toggle-icon"
+              :class="{ rotated: !isMenuCollapsed }"
+            />
             <span v-if="isMenuCollapsed" class="current-menu-label">{{ currentMenuLabel }}</span>
           </div>
           <div class="search-box">
@@ -57,7 +62,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import logoIcon from '@/assets/images/icon.png'
+import logoIcon from '@/assets/images/layout/icon.png'
+import arrowsIcon from '@/assets/images/layout/arrows.jpg'
 
 const route = useRoute()
 
@@ -231,12 +237,15 @@ const currentMenuLabel = computed(() => {
 }
 
 .toggle-icon {
-  font-size: 18px;
-  color: #ffffff;
-  font-weight: bold;
+  width: 20px;
+  height: 20px;
   display: inline-block;
-  text-align: center;
-  line-height: 1;
+  transition: transform 0.3s ease;
+  object-fit: contain;
+}
+
+.toggle-icon.rotated {
+  transform: rotate(180deg);
 }
 
 .current-menu-label {
