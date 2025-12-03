@@ -10,21 +10,25 @@
         <!-- 空闲状态展示 -->
         <div v-if="item.boothStatus !== '0'" class="empty-content">
           <div class="item-name">{{ item.boothName }}</div>
-          <div class="item-capacity-wrapper">
-            <span class="item-capacity">{{ item.boothCapacity }}人</span>
+          <div class="item-message">
+            <div class="item-capacity-wrapper">
+              <span class="item-capacity">{{ item.boothCapacity }}人</span>
+            </div>
           </div>
         </div>
         
         <!-- 占用状态展示 -->
         <div v-if="item.boothStatus === '0'" class="occupied-content">
           <div class="item-name">{{ item.boothName }}</div>
-          <div class="item-capacity-wrapper">
-            <span class="item-capacity">{{ item.boothCapacity }}人</span>
-          </div>
-          <div class="item-details">
-            <div class="item-price">¥{{ item.boothPrice }}</div>
-            <div class="item-people">{{ item.boothPeople }}</div>
-            <div class="item-time">{{ item.boothTime }}</div>
+          <div class="item-message">
+            <div class="item-capacity-wrapper">
+              <span class="item-capacity">{{ item.boothCapacity }}人</span>
+            </div>
+            <div class="item-details">
+              <div class="item-price">¥{{ item.boothPrice }}</div>
+              <div class="item-people">{{ item.boothPeople }}</div>
+              <div class="item-time">{{ item.boothTime }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -66,9 +70,9 @@ onMounted(() => {
 
 /* 网格项基础样式 */
 .grid-item {
-  aspect-ratio: 1.7;
+  aspect-ratio: 1.8;
   border-radius: 4px;
-  padding: 8px;
+  padding: 8px 8px 0 8px;
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -76,6 +80,7 @@ onMounted(() => {
   position: relative;
   min-width: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 /* 空闲状态 - 白色背景（默认样式） */
@@ -129,20 +134,42 @@ onMounted(() => {
   color: #ffffff;
 }
 
-/* 容量信息容器 - 左下角 */
+/* 信息容器 - 占据下半部分 */
+.item-message {
+  margin-top: auto;
+  padding: 8px;
+  background-color: #e6e6e6;
+  border-radius: 0 0 4px 4px;
+  width: calc(100% + 18px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: -8px;
+  margin-right: -8px;
+  margin-bottom: 0;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 9px;
+}
+
+.grid-item[class*=" 0"] .item-message,
+.grid-item.occupied .item-message {
+  background-color: #c0c0c0;
+}
+
+/* 容量信息容器 */
 .item-capacity-wrapper {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: auto;
-  align-self: flex-start;
-  color: #000000;
   font-size: 14px;
+  color: #333333;
 }
 
 .grid-item[class*=" 0"] .item-capacity-wrapper,
 .grid-item.occupied .item-capacity-wrapper {
-  color: rgba(255, 255, 255, 0.9);
+  color: #333333;
 }
 
 /* 容量文字 */
@@ -150,17 +177,24 @@ onMounted(() => {
   font-size: 14px;
   font-weight: 500;
   line-height: 1;
+  color: #333333;
+}
+
+.grid-item[class*=" 0"] .item-capacity,
+.grid-item.occupied .item-capacity {
+  color: #333333;
 }
 
 /* 占用状态详情 */
 .item-details {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   font-size: 12px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  color: #333333;
 }
 
 .item-price {
