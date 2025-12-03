@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/booth")
+@RequestMapping("xmy/booth")
 public class BoothController {
     @Autowired
     private BoothService boothService;

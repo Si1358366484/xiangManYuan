@@ -83,7 +83,7 @@ const toggleMenu = () => {
 // 获取当前选中的菜单项标签
 const currentMenuLabel = computed(() => {
   const currentItem = menuItems.value.find(item => item.path === route.path)
-  return currentItem.label
+  return currentItem ? currentItem.label : ""
 })
 </script>
 
