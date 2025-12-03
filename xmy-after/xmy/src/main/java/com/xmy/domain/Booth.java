@@ -11,4 +11,5 @@ public class Booth {
     private String boothPrice;
     private String boothPeople;
     private String boothTime;
+    private String boothType;
 }
