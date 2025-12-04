@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmy.mapper.BoothMapper">
+
+    <resultMap id="BoothResultMap" type="com.xmy.domain.Booth">
+        <id property="id" column="id"/>
+        <result property="boothName" column="booth_name"/>
+        <result property="boothCapacity" column="booth_capacity"/>
+        <result property="boothStatus" column="booth_status"/>
+        <result property="boothPrice" column="booth_price"/>
+        <result property="boothPeople" column="booth_people"/>
+        <result property="boothTime" column="booth_time"/>
+        <result property="boothType" column="booth_type"/>
+    </resultMap>
+
+    <sql id="baseSelect">
+        SELECT * from booth as b where b.dbstatus != 2
+    </sql>
+
+    <select id="selectBoothList" resultMap="BoothResultMap">
+        SELECT 
+            id,
+            booth_name,
+            booth_capacity,
+            booth_status,
+            booth_price,
+            booth_people,
+            booth_time,
+            booth_type
+        FROM booth
+        <where>
+            <if test="boothName != null and boothName != ''">
+                AND booth_name LIKE CONCAT('%', #{boothName}, '%')
+            </if>
+            <if test="boothStatus != null and boothStatus != ''">
+                AND booth_status = #{boothStatus}
+            </if>
+        </where>
+    </select>
+</mapper>

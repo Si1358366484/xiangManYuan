@@ -5,5 +5,5 @@ import com.xmy.domain.Booth;
 import java.util.List;
 
 public interface BoothService {
-    List<Booth> getBoothList();
+    List<Booth> getBoothList(Booth booth);
 }

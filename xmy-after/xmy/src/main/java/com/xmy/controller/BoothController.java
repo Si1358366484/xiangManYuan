@@ -16,8 +16,8 @@ public class BoothController {
     @Autowired
     private BoothService boothService;
     @GetMapping("/list")
-    public AjaxResult getBoothList() {
-        List<Booth> boothList = boothService.getBoothList();
+    public AjaxResult getBoothList(Booth booth) {
+        List<Booth> boothList = boothService.getBoothList(booth);
         return AjaxResult.success(boothList);
     }
 }

@@ -13,7 +13,7 @@ public class BoothServiceImpl implements BoothService {
     @Autowired
     private BoothMapper boothMapper;
     @Override
-    public List<Booth> getBoothList() {
-        return boothMapper.selectList(null);
+    public List<Booth> getBoothList(Booth booth) {
+        return boothMapper.selectBoothList(booth);
     }
 }
