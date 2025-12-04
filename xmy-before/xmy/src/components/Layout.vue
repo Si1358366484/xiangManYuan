@@ -53,10 +53,15 @@
       
       <!-- 卡座导航 -->
       <div v-if="isHomePage" class="top-navigation">
-        <button class="nav-button">全部</button>
-        <button class="nav-button">大厅</button>
-        <button class="nav-button">包间</button>
-        <button class="nav-button">阳台</button>
+        <button 
+          v-for="item in boothTypeList" 
+          :key="item" 
+          class="nav-button" 
+          :class="{ active: boothType === item }"
+          @click="boothType = item"
+        >
+          {{ item }}
+        </button>
       </div>
       
       <!-- 主内容区域 -->
@@ -68,7 +73,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, provide } from 'vue'
 import { useRoute } from 'vue-router'
 import logoIcon from '@/assets/images/layout/icon.png'
 import arrowsIcon from '@/assets/images/layout/arrows.jpg'
@@ -80,6 +85,13 @@ const searchText = ref('')
 
 // 菜单折叠状态
 const isMenuCollapsed = ref(true)
+
+// 卡座类型
+const boothType = ref('全部')
+const boothTypeList = ref(['全部', '大厅', '包间', '阳台'])
+
+// 使用 provide 向子组件提供 boothType，使其可以响应式更新
+provide('boothType', boothType)
 
 // 菜单项配置
 const menuItems = ref([
@@ -376,7 +388,8 @@ const isHomePage = computed(() => {
 }
 
 .nav-button.active {
-  background-color: #3a3a3a;
+  background-color: #ffd700;
+  color: #000000;
   font-weight: 600;
 }
 

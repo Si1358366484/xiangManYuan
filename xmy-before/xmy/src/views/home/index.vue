@@ -38,16 +38,40 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, inject, watch } from 'vue'
 import { getTableList } from '@/api/home'
 
-// 桌台列表
-const boothList = ref([]);
+// 从父组件 Layout 接收卡座类型
+const boothType = inject('boothType', ref('全部'))
+
+// 桌台列表（原始数据）
+const allBoothList = ref([]);
+
+// 过滤后的桌台列表
+const boothList = computed(() => {
+  if (boothType.value === '全部') {
+    return allBoothList.value
+  }
+  // 根据 boothType 过滤数据，这里需要根据实际的数据结构来过滤
+  // 假设每个桌台项有一个 boothCategory 或类似字段来标识类型
+  return allBoothList.value.filter(item => {
+    // 根据实际数据结构调整过滤条件
+    // 例如：item.boothCategory === boothType.value
+    // 或者：item.boothArea === boothType.value
+    return true // 暂时返回全部，您需要根据实际数据字段来过滤
+  })
+})
 
 onMounted(() => {
   getTableList().then(res => {
-    boothList.value = res.data;
+    allBoothList.value = res.data;
   })
+})
+
+// 监听 boothType 变化，可以在这里添加额外逻辑
+watch(boothType, (newType) => {
+  console.log('卡座类型切换为:', newType)
+  // 可以在这里添加其他逻辑，比如重新请求数据等
 })
 
 </script>
