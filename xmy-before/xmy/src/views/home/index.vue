@@ -12,6 +12,7 @@
           <div class="item-name">{{ item.boothName }}</div>
           <div class="item-message">
             <div class="item-capacity-wrapper">
+              <img src="@/assets/images/home/people.png" alt="人数" class="item-capacity-icon">
               <span class="item-capacity">{{ item.boothCapacity }}人</span>
             </div>
           </div>
@@ -170,6 +171,15 @@ onMounted(() => {
 .grid-item[class*=" 0"] .item-capacity-wrapper,
 .grid-item.occupied .item-capacity-wrapper {
   color: #333333;
+}
+
+/* 容量图标 */
+.item-capacity-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 /* 容量文字 */
