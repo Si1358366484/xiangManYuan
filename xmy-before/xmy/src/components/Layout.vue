@@ -21,7 +21,7 @@
     <!-- 右侧内容容器 -->
     <div class="content-wrapper">
       <!-- 顶部栏 -->
-      <div class="top-bar">
+      <div class="top-bar" :class="{ 'has-navigation': isHomePage }">
         <div class="top-bar-left">
           <!-- 菜单切换按钮 -->
           <div class="menu-toggle" @click="toggleMenu">
@@ -46,7 +46,7 @@
         <div class="top-bar-right">
           <div class="user-info">
             <img :src="logoIcon" alt="头像" class="avatar" />
-            <span class="username">管理员</span>
+            <!-- <span class="username">管理员</span> -->
           </div>
         </div>
       </div>
@@ -220,6 +220,11 @@ const isHomePage = computed(() => {
   flex-shrink: 0;
 }
 
+/* 当存在顶部导航时，去除顶部栏的底部阴影 */
+.top-bar.has-navigation {
+  box-shadow: none;
+}
+
 .top-bar-left {
   flex: 1;
   display: flex;
@@ -348,6 +353,9 @@ const isHomePage = computed(() => {
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  margin-top: -2px;
+  position: relative;
+  z-index: 99;
 }
 
 .nav-button {
