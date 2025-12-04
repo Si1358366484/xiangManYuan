@@ -51,6 +51,14 @@
         </div>
       </div>
       
+      <!-- 卡座导航 -->
+      <div v-if="isHomePage" class="top-navigation">
+        <button class="nav-button">全部</button>
+        <button class="nav-button">大厅</button>
+        <button class="nav-button">包间</button>
+        <button class="nav-button">阳台</button>
+      </div>
+      
       <!-- 主内容区域 -->
       <div class="content-container">
         <router-view />
@@ -90,6 +98,11 @@ const toggleMenu = () => {
 const currentMenuLabel = computed(() => {
   const currentItem = menuItems.value.find(item => item.path === route.path)
   return currentItem ? currentItem.label : ""
+})
+
+// 判断是否为首页
+const isHomePage = computed(() => {
+  return route.path === '/home'
 })
 </script>
 
@@ -325,6 +338,38 @@ const currentMenuLabel = computed(() => {
   font-size: 14px;
   color: #ffffff;
   font-weight: 500;
+}
+
+/* 顶部导航样式 */
+.top-navigation {
+  width: 100%;
+  background-color: #2a2a2a;
+  padding: 2px 2px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.nav-button {
+  padding: 8px 20px;
+  background-color: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-button.active {
+  background-color: #3a3a3a;
+  font-weight: 600;
 }
 
 /* 右侧内容容器样式 */
