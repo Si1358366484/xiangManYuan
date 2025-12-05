@@ -2,6 +2,8 @@ package com.xmy.controller;
 
 import com.xmy.domain.AjaxResult;
 import com.xmy.domain.Booth;
+import com.xmy.domain.BoothStatusCount;
+import com.xmy.domain.vo.BoothVo;
 import com.xmy.service.BoothService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +16,18 @@ public class BoothController {
     @Autowired
     private BoothService boothService;
     // ==================== 特殊处理逻辑 ====================
-    //@GetMapping("/getTotal")
+
 
     // ==================== 常规CRUD ====================
     //获取卡座列表
     @GetMapping("/list")
     public AjaxResult getBoothList(Booth booth) {
+        BoothVo boothVo = new BoothVo();
         List<Booth> boothList = boothService.getBoothList(booth);
-        System.out.println(boothList);
-        return AjaxResult.success(boothList);
+        BoothStatusCount boothStatusCount = boothService.getBoothStatusCount();
+        boothVo.setBoothList(boothList);
+        boothVo.setBoothStatusCount(boothStatusCount);
+        return AjaxResult.success(boothVo);
     }
     //修改卡座
     @PutMapping
