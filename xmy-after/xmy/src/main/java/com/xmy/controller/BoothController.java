@@ -13,6 +13,10 @@ import java.util.List;
 public class BoothController {
     @Autowired
     private BoothService boothService;
+    // ==================== 特殊处理逻辑 ====================
+    //@GetMapping("/getTotal")
+
+    // ==================== 常规CRUD ====================
     //获取卡座列表
     @GetMapping("/list")
     public AjaxResult getBoothList(Booth booth) {
