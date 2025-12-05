@@ -32,6 +32,30 @@
         </div>
       </div>
     </div>
+    
+    <!-- 状态统计栏 -->
+    <div class="status-bar">
+      <div class="status-item">
+        <span class="status-icon status-icon-all"></span>
+        <span class="status-label">全部</span>
+        <span class="status-count">({{ boothStatusCount.total }})</span>
+      </div>
+      <div class="status-item">
+        <span class="status-icon status-icon-free"></span>
+        <span class="status-label">空桌台</span>
+        <span class="status-count">({{ boothStatusCount.freeCount }})</span>
+      </div>
+      <div class="status-item">
+        <span class="status-icon status-icon-occupy"></span>
+        <span class="status-label">待结账</span>
+        <span class="status-count">({{ boothStatusCount.occupyCount }})</span>
+      </div>
+      <div class="status-item">
+        <span class="status-icon status-icon-reserve"></span>
+        <span class="status-label">已预结</span>
+        <span class="status-count">({{ boothStatusCount.reserveCount }})</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -46,12 +70,31 @@ const boothType = inject('boothType', ref('全部'))
 // 桌台列表（原始数据）
 const boothList = ref([]);
 
+// 状态统计
+const boothStatusCount = ref({
+  total: 0,
+  freeCount: 0,
+  occupyCount: 0,
+  reserveCount: 0
+});
+
 // 当前筛选参数
 const currentFilterParams = ref({});
 
+// 处理列表数据更新
+const handleListData = (res) => {
+  boothList.value = res.data.boothList || [];
+  boothStatusCount.value = res.data.boothStatusCount || {
+    total: 0,
+    freeCount: 0,
+    occupyCount: 0,
+    reserveCount: 0
+  };
+};
+
 onMounted(() => {
   getTableList().then(res => {
-    boothList.value = res.data;
+    handleListData(res);
   })
 })
 
@@ -69,7 +112,7 @@ watch(boothType, (newType) => {
   // 构建参数：全部类型不传参，其他类型传递对应的数字编码
   currentFilterParams.value = newType === '全部' ? {} : { boothType: typeMapping[newType] }
   getTableList(currentFilterParams.value).then(res => {
-    boothList.value = res.data
+    handleListData(res);
   })
 })
 
@@ -99,7 +142,7 @@ const changeBoothStatus = async (item) => {
     
     await updateBoothInfo(params)
     const res = await getTableList(currentFilterParams.value)
-    boothList.value = res.data
+    handleListData(res);
     
     ElMessage.success('操作成功')
     
@@ -298,6 +341,61 @@ const changeBoothStatus = async (item) => {
 .grid-item[class*=" 0"] .item-capacity,
 .grid-item.occupied .item-capacity {
   color: #333333;
+}
+
+/* 状态统计栏 */
+.status-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 24px;
+  margin: 20px auto 0;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+  border-radius: 4px;
+  max-width: fit-content;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #333333;
+}
+
+.status-icon {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.status-icon-all {
+  background-color: #000000;
+}
+
+.status-icon-free {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+}
+
+.status-icon-occupy {
+  background-color: #dc3545;
+}
+
+.status-icon-reserve {
+  background-color: #ff9800;
+}
+
+.status-label {
+  font-weight: 500;
+}
+
+.status-count {
+  color: #666666;
 }
 </style>
 
