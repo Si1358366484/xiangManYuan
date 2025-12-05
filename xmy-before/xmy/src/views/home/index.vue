@@ -41,6 +41,7 @@
 <script setup>
 import { ref, computed, onMounted, inject, watch } from 'vue'
 import { getTableList, updateBoothInfo } from '@/api/home'
+import { ElMessage } from 'element-plus'
 
 // 从父组件 Layout 接收卡座类型
 const boothType = inject('boothType', ref('全部'))
@@ -77,7 +78,15 @@ watch(boothType, (newType) => {
 
 // 改变卡座状态
 const changeBoothStatus = (item) => {
-  console.log('改变卡座状态:', item)
+  console.log('翻台操作:', item)
+  
+  // 翻台确认弹窗语句
+  const operationType = item.boothStatus === '0' ? '翻台' : '开台'
+  const confirmMessage = `确定要为【${item.boothName}】执行${operationType}操作吗？`
+  
+  if (!confirm(confirmMessage)) {
+    return // 用户取消操作
+  }
   
   // 构建参数：包含卡座ID和新的状态
   const newStatus = item.boothStatus === '0' ? '1' : '0'
@@ -87,9 +96,12 @@ const changeBoothStatus = (item) => {
   }
   
   updateBoothInfo(params).then(res => {
-    getTableList(currentFilterParams.value).then(res => {
-      boothList.value = res.data
-    })
+    return getTableList(currentFilterParams.value)
+  }).then(res => {
+    boothList.value = res.data
+    ElMessage.success('操作成功')
+  }).catch(error => {
+    ElMessage.error('操作失败')
   })
 }
 </script>
