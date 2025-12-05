@@ -201,8 +201,7 @@ const changeBoothStatus = async (item) => {
 
 /* 价格 - 左上角，名称下方 */
 .item-money {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 14px;
   color: #333333;
   line-height: 1.2;
   margin-top: 4px;
@@ -262,7 +261,7 @@ const changeBoothStatus = async (item) => {
 
 .grid-item[class*=" 0"] .item-message,
 .grid-item.occupied .item-message {
-  background-color: #c0c0c0;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 /* 容量信息容器 */
