@@ -163,6 +163,7 @@ const changeBoothStatus = async (item) => {
   width: 100%;
   height: 100%;
   overflow-y: auto;
+  position: relative;
 }
 
 /* 网格布局样式 - 一行7个 */
@@ -354,7 +355,7 @@ const changeBoothStatus = async (item) => {
   background-color: #ffffff;
   border-radius: 4px;
   max-width: fit-content;
-  position: fixed;
+  position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
