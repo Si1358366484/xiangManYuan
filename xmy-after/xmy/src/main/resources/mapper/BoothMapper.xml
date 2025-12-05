@@ -37,9 +37,9 @@
     <select id="selectBoothStatusCount" resultType="com.xmy.domain.dto.BoothStatusCount">
         SELECT
             COUNT(*) as total,
-            SUM(CASE WHEN booth_status = '空闲' THEN 1 ELSE 0 END) as freeCount,
-            SUM(CASE WHEN booth_status = '占用' THEN 1 ELSE 0 END) as occupyCount,
-            SUM(CASE WHEN booth_status = '已预约' THEN 1 ELSE 0 END) as reserveCount
+            COUNT(CASE WHEN booth_status = 1 THEN 1 END) as freeCount,
+            COUNT(CASE WHEN booth_status = 0 THEN 1 END) as occupyCount,
+            COUNT(CASE WHEN booth_status = 2 THEN 1 END) as reserveCount
         FROM booth
         WHERE dbstatus != 2
     </select>
