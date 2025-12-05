@@ -18,6 +18,7 @@ public class BoothController {
     @GetMapping("/list")
     public AjaxResult getBoothList(Booth booth) {
         List<Booth> boothList = boothService.getBoothList(booth);
+        System.out.println(boothList);
         return AjaxResult.success(boothList);
     }
 }

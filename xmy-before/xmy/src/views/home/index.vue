@@ -56,23 +56,19 @@ onMounted(() => {
 // 监听 boothType 变化，可以在这里添加额外逻辑
 watch(boothType, (newType) => {
   console.log('卡座类型切换为:', newType)
-  if (newType === '大厅') {
-    getTableList().then(res => {
-      boothList.value = res.data;
-    })
-  } else if (newType === '包间') {
-    getTableListByType(newType).then(res => {
-      boothList.value = res.data;
-    })
-  } else if (newType === '阳台') {
-    getTableListByType(newType).then(res => {
-      boothList.value = res.data;
-    })
-  } else {
-    getTableList().then(res => {
-      boothList.value = res.data;
-    })
+  
+  // 卡座类型映射：前端名称 -> 后端数字编码
+  const typeMapping = {
+    '大厅': 1,
+    '包间': 2,
+    '阳台': 3
   }
+  
+  // 构建参数：全部类型不传参，其他类型传递对应的数字编码（三元运算符）
+  const params = newType === '全部' ? {} : { boothType: typeMapping[newType] } 
+  getTableList(params).then(res => {
+    boothList.value = res.data
+  })
 })
 
 </script>
