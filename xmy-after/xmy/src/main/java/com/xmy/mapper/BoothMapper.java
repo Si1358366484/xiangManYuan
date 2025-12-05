@@ -1,8 +1,8 @@
 package com.xmy.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xmy.domain.Booth;
-import com.xmy.domain.BoothStatusCount;
+import com.xmy.domain.entity.Booth;
+import com.xmy.domain.dto.BoothStatusCount;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

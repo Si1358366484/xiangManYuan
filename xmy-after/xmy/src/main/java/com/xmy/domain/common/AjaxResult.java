@@ -1,4 +1,4 @@
-package com.xmy.domain;
+package com.xmy.domain.common;
 
 import java.util.HashMap;
 
@@ -142,3 +142,4 @@ public class AjaxResult extends HashMap<String, Object>
         return new AjaxResult(code, msg, null);
     }
 }
+

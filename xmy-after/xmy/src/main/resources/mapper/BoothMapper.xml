@@ -5,7 +5,7 @@
 
 <mapper namespace="com.xmy.mapper.BoothMapper">
 
-    <resultMap id="BoothResultMap" type="com.xmy.domain.Booth">
+    <resultMap id="BoothResultMap" type="com.xmy.domain.entity.Booth">
         <id property="id" column="id"/>
         <result property="boothName" column="booth_name"/>
         <result property="boothCapacity" column="booth_capacity"/>
@@ -34,7 +34,7 @@
         <include refid="whereClause"/>
     </select>
 
-    <select id="selectBoothStatusCount" resultType="com.xmy.domain.BoothStatusCount">
+    <select id="selectBoothStatusCount" resultType="com.xmy.domain.dto.BoothStatusCount">
         SELECT
             COUNT(*) as total,
             SUM(CASE WHEN booth_status = '空闲' THEN 1 ELSE 0 END) as freeCount,

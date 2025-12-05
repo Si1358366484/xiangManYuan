@@ -1,8 +1,8 @@
 package com.xmy.controller;
 
-import com.xmy.domain.AjaxResult;
-import com.xmy.domain.Booth;
-import com.xmy.domain.BoothStatusCount;
+import com.xmy.domain.common.AjaxResult;
+import com.xmy.domain.entity.Booth;
+import com.xmy.domain.dto.BoothStatusCount;
 import com.xmy.domain.vo.BoothVo;
 import com.xmy.service.BoothService;
 import org.springframework.beans.factory.annotation.Autowired;

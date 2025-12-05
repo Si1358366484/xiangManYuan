@@ -1,8 +1,10 @@
-package com.xmy.domain;
-//获取卡座状态统计类
+package com.xmy.domain.dto;
 
 import lombok.Data;
 
+/**
+ * 获取卡座状态统计类
+ */
 @Data
 public class BoothStatusCount {
     //总数
@@ -14,3 +16,4 @@ public class BoothStatusCount {
     //已预约数
     private Integer reserveCount;
 }
+

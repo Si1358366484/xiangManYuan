@@ -1,4 +1,4 @@
-package com.xmy.domain;
+package com.xmy.domain.entity;
 
 import lombok.Data;
 
@@ -16,3 +16,4 @@ public class Booth {
     // ==================== 特殊处理逻辑 ====================
 
 }
+

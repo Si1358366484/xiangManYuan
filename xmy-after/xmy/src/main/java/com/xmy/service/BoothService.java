@@ -1,7 +1,7 @@
 package com.xmy.service;
 
-import com.xmy.domain.Booth;
-import com.xmy.domain.BoothStatusCount;
+import com.xmy.domain.entity.Booth;
+import com.xmy.domain.dto.BoothStatusCount;
 
 import java.util.List;
 

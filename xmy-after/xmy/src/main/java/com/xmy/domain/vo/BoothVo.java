@@ -1,7 +1,7 @@
 package com.xmy.domain.vo;
 
-import com.xmy.domain.Booth;
-import com.xmy.domain.BoothStatusCount;
+import com.xmy.domain.entity.Booth;
+import com.xmy.domain.dto.BoothStatusCount;
 import lombok.Data;
 
 import java.util.List;
