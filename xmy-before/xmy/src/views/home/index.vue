@@ -41,7 +41,7 @@
 <script setup>
 import { ref, computed, onMounted, inject, watch } from 'vue'
 import { getTableList, updateBoothInfo } from '@/api/home'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 // 从父组件 Layout 接收卡座类型
 const boothType = inject('boothType', ref('全部'))
@@ -77,32 +77,44 @@ watch(boothType, (newType) => {
 })
 
 // 改变卡座状态
-const changeBoothStatus = (item) => {
+const changeBoothStatus = async (item) => {
   console.log('翻台操作:', item)
   
   // 翻台确认弹窗语句
   const operationType = item.boothStatus === '0' ? '翻台' : '开台'
   const confirmMessage = `确定要为【${item.boothName}】执行${operationType}操作吗？`
   
-  if (!confirm(confirmMessage)) {
-    return // 用户取消操作
-  }
-  
-  // 构建参数：包含卡座ID和新的状态
-  const newStatus = item.boothStatus === '0' ? '1' : '0'
-  const params = { 
-    id: item.id,
-    boothStatus: newStatus 
-  }
-  
-  updateBoothInfo(params).then(res => {
-    return getTableList(currentFilterParams.value)
-  }).then(res => {
+  try {
+    // 使用 Element Plus 的确认对话框
+    await ElMessageBox.confirm(confirmMessage, '操作确认', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+      customClass: 'booth-operation-dialog'
+    })
+    
+    // 构建参数：包含卡座ID和新的状态
+    const newStatus = item.boothStatus === '0' ? '1' : '0'
+    const params = { 
+      id: item.id,
+      boothStatus: newStatus 
+    }
+    
+    await updateBoothInfo(params)
+    const res = await getTableList(currentFilterParams.value)
     boothList.value = res.data
+    
     ElMessage.success('操作成功')
-  }).catch(error => {
-    ElMessage.error('操作失败')
-  })
+    
+  } catch (error) {
+    if (error === 'cancel') {
+      // 用户取消操作
+      ElMessage.info('已取消操作')
+    } else {
+      // 其他错误
+      ElMessage.error('操作失败: ' + error)
+    }
+  }
 }
 </script>
 
