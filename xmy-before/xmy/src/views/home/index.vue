@@ -350,11 +350,15 @@ const changeBoothStatus = async (item) => {
   align-items: center;
   gap: 24px;
   padding: 12px 24px;
-  margin: 20px auto 0;
   flex-wrap: wrap;
   background-color: #ffffff;
   border-radius: 4px;
   max-width: fit-content;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
 }
 
 .status-item {
