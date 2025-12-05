@@ -396,7 +396,7 @@ const isHomePage = computed(() => {
 /* 右侧内容容器样式 */
 .content-container {
   flex: 1;
-  padding: 20px;
+  padding: 8px 2px;
   box-sizing: border-box;
   overflow: auto;
   background-color: transparent;
