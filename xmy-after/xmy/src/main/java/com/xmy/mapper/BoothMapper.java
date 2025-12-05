@@ -9,4 +9,5 @@ import java.util.List;
 @Mapper
 public interface BoothMapper extends BaseMapper<Booth> {
     List<Booth> selectBoothList(Booth booth);
+
 }

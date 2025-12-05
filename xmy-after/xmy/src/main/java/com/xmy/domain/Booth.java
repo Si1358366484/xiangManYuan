@@ -12,4 +12,6 @@ public class Booth {
     private String boothPeople;
     private String boothTime;
     private String boothType;
+    //通用字段
+    private Integer dbstatus;
 }

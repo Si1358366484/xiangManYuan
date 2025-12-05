@@ -14,6 +14,7 @@
         <result property="boothPeople" column="booth_people"/>
         <result property="boothTime" column="booth_time"/>
         <result property="boothType" column="booth_type"/>
+        <result property="dbstatus" column="dbstatus"/>
     </resultMap>
     <!--    通用查询sql-->
     <sql id="baseSelect">
@@ -28,6 +29,7 @@
         <if test="boothPeople != null and boothPeople != ''">and b.booth_people like CONCAT('%',#{boothPeople},'%')</if>
         <if test="boothTime != null and boothTime != ''">and b.booth_time like CONCAT('%',#{boothTime},'%')</if>
         <if test="boothType != null and boothType != ''">and b.booth_type like CONCAT('%',#{boothType},'%')</if>
+        <if test="dbstatus != null">and b.dbstatus = #{dbstatus}</if>
     </sql>
     <select id="selectBoothList" resultMap="BoothResultMap">
         <include refid="baseSelect"/>

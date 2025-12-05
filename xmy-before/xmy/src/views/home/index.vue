@@ -6,6 +6,7 @@
         v-for="(item, index) in boothList" 
         :key="index"
         :class="['grid-item', item.boothStatus]"
+        @click="changeBoothStatus(item)"
       >
         <!-- 空闲状态展示 -->
         <div v-if="item.boothStatus !== '0'" class="empty-content">
@@ -39,13 +40,16 @@
 
 <script setup>
 import { ref, computed, onMounted, inject, watch } from 'vue'
-import { getTableList } from '@/api/home'
+import { getTableList, updateBoothInfo } from '@/api/home'
 
 // 从父组件 Layout 接收卡座类型
 const boothType = inject('boothType', ref('全部'))
 
 // 桌台列表（原始数据）
 const boothList = ref([]);
+
+// 当前筛选参数
+const currentFilterParams = ref({});
 
 onMounted(() => {
   getTableList().then(res => {
@@ -64,13 +68,30 @@ watch(boothType, (newType) => {
     '阳台': 3
   }
   
-  // 构建参数：全部类型不传参，其他类型传递对应的数字编码（三元运算符）
-  const params = newType === '全部' ? {} : { boothType: typeMapping[newType] } 
-  getTableList(params).then(res => {
+  // 构建参数：全部类型不传参，其他类型传递对应的数字编码
+  currentFilterParams.value = newType === '全部' ? {} : { boothType: typeMapping[newType] }
+  getTableList(currentFilterParams.value).then(res => {
     boothList.value = res.data
   })
 })
 
+// 改变卡座状态
+const changeBoothStatus = (item) => {
+  console.log('改变卡座状态:', item)
+  
+  // 构建参数：包含卡座ID和新的状态
+  const newStatus = item.boothStatus === '0' ? '1' : '0'
+  const params = { 
+    id: item.id,
+    boothStatus: newStatus 
+  }
+  
+  updateBoothInfo(params).then(res => {
+    getTableList(currentFilterParams.value).then(res => {
+      boothList.value = res.data
+    })
+  })
+}
 </script>
 
 <style scoped>

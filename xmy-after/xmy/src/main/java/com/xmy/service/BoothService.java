@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface BoothService {
     List<Booth> getBoothList(Booth booth);
+
+    int updateBooth(Booth booth);
 }

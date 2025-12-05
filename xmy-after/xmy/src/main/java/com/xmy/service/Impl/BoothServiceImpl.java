@@ -16,4 +16,9 @@ public class BoothServiceImpl implements BoothService {
     public List<Booth> getBoothList(Booth booth) {
         return boothMapper.selectBoothList(booth);
     }
+
+    @Override
+    public int updateBooth(Booth booth) {
+        return boothMapper.updateById(booth);
+    }
 }

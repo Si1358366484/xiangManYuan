@@ -8,3 +8,11 @@ export const getTableList = (query) => {
     params: query
   })
 }
+// 修改卡座信息
+export const updateBoothInfo = (query) => {
+  return request({
+    url: '/xmy/booth',
+    method: 'put',
+    params: query
+  })
+}
