@@ -8,8 +8,7 @@ public class Booth {
     private String boothName;
     private String boothCapacity;
     private String boothStatus;
-    private String boothPrice;
-    private String boothPeople;
+    private Double boothPrice;
     private String boothTime;
     private String boothType;
     //通用字段

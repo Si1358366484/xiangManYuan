@@ -11,7 +11,6 @@
         <result property="boothCapacity" column="booth_capacity"/>
         <result property="boothStatus" column="booth_status"/>
         <result property="boothPrice" column="booth_price"/>
-        <result property="boothPeople" column="booth_people"/>
         <result property="boothTime" column="booth_time"/>
         <result property="boothType" column="booth_type"/>
         <result property="dbstatus" column="dbstatus"/>
@@ -25,8 +24,7 @@
         <if test="boothName != null and boothName != ''">and b.booth_name like CONCAT('%',#{boothName},'%')</if>
         <if test="boothCapacity != null and boothCapacity != ''">and b.booth_capacity like CONCAT('%',#{boothCapacity},'%')</if>
         <if test="boothStatus != null and boothStatus != ''">and b.booth_status like CONCAT('%',#{boothStatus},'%')</if>
-        <if test="boothPrice != null and boothPrice != ''">and b.booth_price like CONCAT('%',#{boothPrice},'%')</if>
-        <if test="boothPeople != null and boothPeople != ''">and b.booth_people like CONCAT('%',#{boothPeople},'%')</if>
+        <if test="boothPrice != null">and CAST(b.booth_price AS CHAR) like CONCAT('%',#{boothPrice},'%')</if>
         <if test="boothTime != null and boothTime != ''">and b.booth_time like CONCAT('%',#{boothTime},'%')</if>
         <if test="boothType != null and boothType != ''">and b.booth_type like CONCAT('%',#{boothType},'%')</if>
         <if test="dbstatus != null">and b.dbstatus = #{dbstatus}</if>

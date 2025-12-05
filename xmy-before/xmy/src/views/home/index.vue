@@ -22,14 +22,11 @@
         <!-- 占用状态展示 -->
         <div v-if="item.boothStatus === '0'" class="occupied-content">
           <div class="item-name">{{ item.boothName }}</div>
+          <div class="item-money">￥{{ item.boothPrice }}</div>
           <div class="item-message">
-            <div class="item-capacity-wrapper">
-              <span class="item-capacity">{{ item.boothCapacity }}人</span>
-            </div>
-            <div class="item-details">
-              <div class="item-price">¥{{ item.boothPrice }}</div>
-              <div class="item-people">{{ item.boothPeople }}</div>
-              <div class="item-time">{{ item.boothTime }}</div>
+            <div class="item-time-wrapper">
+              <img src="@/assets/images/home/time.png" alt="时间" class="item-capacity-icon">
+              <span class="item-time">{{ item.boothTime }}分钟</span>
             </div>
           </div>
         </div>
@@ -184,6 +181,7 @@ const changeBoothStatus = async (item) => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
 }
 
 /* 卡座名称 - 左上角 */
@@ -198,6 +196,48 @@ const changeBoothStatus = async (item) => {
 
 .grid-item[class*=" 0"] .item-name,
 .grid-item.occupied .item-name {
+  color: #ffffff;
+}
+
+/* 价格 - 左上角，名称下方 */
+.item-money {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333333;
+  line-height: 1.2;
+  margin-top: 4px;
+}
+
+.grid-item[class*=" 0"] .item-money,
+.grid-item.occupied .item-money {
+  color: #ffffff;
+}
+
+/* 时间信息容器 - 右下角 */
+.item-time-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #333333;
+  justify-content: flex-end;
+}
+
+.grid-item[class*=" 0"] .item-time-wrapper,
+.grid-item.occupied .item-time-wrapper {
+  color: #333333;
+}
+
+/* 时间文字 */
+.item-time {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  color: #333333;
+}
+
+.grid-item[class*=" 0"] .item-time,
+.grid-item.occupied .item-time {
   color: #ffffff;
 }
 
@@ -259,29 +299,6 @@ const changeBoothStatus = async (item) => {
 .grid-item[class*=" 0"] .item-capacity,
 .grid-item.occupied .item-capacity {
   color: #333333;
-}
-
-/* 占用状态详情 */
-.item-details {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  font-size: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  color: #333333;
-}
-
-.item-price {
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.item-people,
-.item-time {
-  opacity: 0.9;
-  font-size: 12px;
 }
 </style>
 
