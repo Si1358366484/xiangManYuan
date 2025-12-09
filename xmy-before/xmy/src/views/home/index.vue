@@ -60,12 +60,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, inject, watch } from 'vue'
+import { ref, onMounted, inject, watch } from 'vue'
 import { getTableList, updateBoothInfo } from '@/api/home'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-// 从父组件 Layout 接收卡座类型
+// 从父组件 Layout 接收卡座类型、搜索文本和搜索关键词
 const boothType = inject('boothType', ref('全部'))
+const searchKeyword = inject('searchKeyword', ref(''))
 
 // 桌台列表（原始数据）
 const boothList = ref([]);
@@ -78,9 +79,6 @@ const boothStatusCount = ref({
   reserveCount: 0
 });
 
-// 当前筛选参数
-const currentFilterParams = ref({});
-
 // 处理列表数据更新
 const handleListData = (res) => {
   boothList.value = res.data.boothList || [];
@@ -92,28 +90,35 @@ const handleListData = (res) => {
   };
 };
 
-onMounted(() => {
-  getTableList().then(res => {
-    handleListData(res);
-  })
-})
-
-// 监听 boothType 变化，可以在这里添加额外逻辑
-watch(boothType, (newType) => {
-  console.log('卡座类型切换为:', newType)
-  
+//创建搜索函数，接收搜索关键词和卡座类型，调用getTableList接口，更新boothList数据
+const searchBooth = (searchKeyword, boothType) => {
   // 卡座类型映射：前端名称 -> 后端数字编码
   const typeMapping = {
     '大厅': 1,
     '包间': 2,
     '阳台': 3
   }
-  
-  // 构建参数：全部类型不传参，其他类型传递对应的数字编码
-  currentFilterParams.value = newType === '全部' ? {} : { boothType: typeMapping[newType] }
-  getTableList(currentFilterParams.value).then(res => {
+  // 当前筛选参数
+  const currentFilterParams = boothType === '全部' ? {} : { boothType: typeMapping[boothType] };
+  // 构建搜索参数
+  const searchText = searchKeyword ? { boothName: searchKeyword } : {};
+  // 合并参数
+  const params = { ...currentFilterParams, ...searchText };
+  getTableList(params).then(res => {
     handleListData(res);
+  }).catch(error => {
+    console.error('搜索失败:', error);
+    ElMessage.error('搜索失败，请稍后重试');
   })
+}
+
+onMounted(() => {
+  searchBooth(searchKeyword.value, boothType.value)
+})
+
+// 监听 boothType 和 searchKeyword 变化
+watch([boothType, searchKeyword], () => {
+  searchBooth(searchKeyword.value, boothType.value)
 })
 
 // 改变卡座状态
@@ -141,11 +146,8 @@ const changeBoothStatus = async (item) => {
     }
     
     await updateBoothInfo(params)
-    const res = await getTableList(currentFilterParams.value)
-    handleListData(res);
-    
+    searchBooth(searchKeyword.value, boothType.value)
     ElMessage.success('操作成功')
-    
   } catch (error) {
     if (error === 'cancel') {
       // 用户取消操作

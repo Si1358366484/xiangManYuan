@@ -36,11 +36,11 @@
           <div class="search-box">
             <input 
               type="text" 
-              placeholder="搜索..." 
+              :placeholder="searchPlaceholder" 
               class="search-input"
               v-model="searchText"
             />
-            <span class="search-icon">🔍</span>
+            <span class="search-icon" @click="handleSearch">🔍</span>
           </div>
         </div>
         <div class="top-bar-right">
@@ -73,15 +73,28 @@
 </template>
 
 <script setup>
-import { ref, computed, provide } from 'vue'
+import { ref, computed, provide, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { getTableList } from '@/api/home'
 import logoIcon from '@/assets/images/layout/icon.png'
 import arrowsIcon from '@/assets/images/layout/arrows.jpg'
 
 const route = useRoute()
 
-// 搜索文本
+// 搜索文本（用于给provide提供搜索文本）
 const searchText = ref('')
+
+// 搜索占位符配置 - 根据路由动态显示
+const searchPlaceholderMap = {
+  '/home': '搜索卡座名称...',
+  '/employees': '搜索员工姓名...',
+  '/promotions': '搜索优惠名称...'
+}
+
+// 根据当前路由获取搜索占位符
+const searchPlaceholder = computed(() => {
+  return searchPlaceholderMap[route.path] || '搜索...'
+})
 
 // 菜单折叠状态
 const isMenuCollapsed = ref(true)
@@ -92,6 +105,10 @@ const boothTypeList = ref(['全部', '大厅', '包间', '阳台'])
 
 // 使用 provide 向子组件提供 boothType，使其可以响应式更新
 provide('boothType', boothType)
+
+// 搜索关键词 - 在 setup 顶层 provide，在 handleSearch 中更新值
+const searchKeyword = ref('')
+provide('searchKeyword', searchKeyword)
 
 // 菜单项配置
 const menuItems = ref([
@@ -115,6 +132,18 @@ const currentMenuLabel = computed(() => {
 // 判断是否为首页
 const isHomePage = computed(() => {
   return route.path === '/home'
+})
+
+// 处理搜索 - 点击搜索按钮时触发
+const handleSearch = () => {
+  // 更新 searchKeyword 的值，子组件会监听到这个变化
+  searchKeyword.value = searchText.value
+}
+
+// 监听路由变化，切换路由时清空搜索文本和搜索关键词
+watch(() => route.path, () => {
+  searchText.value = ''
+  searchKeyword.value = ''
 })
 </script>
 
@@ -320,7 +349,14 @@ const isHomePage = computed(() => {
   transform: translateY(-50%);
   color: rgba(255, 255, 255, 0.6);
   font-size: 16px;
-  pointer-events: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.search-icon:hover {
+  color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-50%) scale(1.1);
 }
 
 .top-bar-right {
