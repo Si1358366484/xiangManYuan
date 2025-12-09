@@ -123,12 +123,8 @@ watch([boothType, searchKeyword], () => {
 
 // 改变卡座状态
 const changeBoothStatus = async (item) => {
-  console.log('翻台操作:', item)
-  
-  // 翻台确认弹窗语句
-  const operationType = item.boothStatus === '0' ? '翻台' : '开台'
-  const confirmMessage = `确定要为【${item.boothName}】执行${operationType}操作吗？`
-  
+  // 开台确认弹窗语句
+  const confirmMessage = `确定要为【${item.boothName}】执行开台操作吗？`
   try {
     // 使用 Element Plus 的确认对话框
     await ElMessageBox.confirm(confirmMessage, '操作确认', {
@@ -137,14 +133,11 @@ const changeBoothStatus = async (item) => {
       type: 'warning',
       customClass: 'booth-operation-dialog'
     })
-    
-    // 构建参数：包含卡座ID和新的状态
-    const newStatus = item.boothStatus === '0' ? '1' : '0'
+    // 构建参数：包含卡座ID和新的状态（开台：设置为占用状态'0'）
     const params = { 
       id: item.id,
-      boothStatus: newStatus 
+      boothStatus: '0' 
     }
-    
     await updateBoothInfo(params)
     searchBooth(searchKeyword.value, boothType.value)
     ElMessage.success('操作成功')
