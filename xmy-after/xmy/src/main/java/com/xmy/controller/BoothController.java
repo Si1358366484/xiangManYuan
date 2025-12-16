@@ -15,9 +15,6 @@ import java.util.List;
 public class BoothController {
     @Autowired
     private BoothService boothService;
-    // ==================== 特殊处理逻辑 ====================
-
-
     // ==================== 常规CRUD ====================
     //获取卡座列表
     @GetMapping("/list")
@@ -44,4 +41,7 @@ public class BoothController {
             return AjaxResult.error("修改失败：" + e.getMessage());
         }
     }
+
+    // ==================== 特殊处理逻辑 ====================
+
 }

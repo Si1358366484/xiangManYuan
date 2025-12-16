@@ -1,15 +1,17 @@
 package com.xmy.domain.entity;
 
 import lombok.Data;
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 public class BaseEntity {
     // 通用字段
-    private Integer id;
+    private Long id;
     // 审计字段
-    private String createBy;
-    private String createTime;
-    private String updateBy;
-    private String updateTime;
+    private Long createBy;
+    private Date createTime;
+    private Long updateBy;
+    private Date updateTime;
     private Integer dbstatus;
 }
