@@ -29,9 +29,13 @@
         <if test="boothType != null and boothType != ''">and b.booth_type like CONCAT('%',#{boothType},'%')</if>
         <if test="dbstatus != null">and b.dbstatus = #{dbstatus}</if>
     </sql>
+    <sql id="orderClause">
+        ORDER BY b.id DESC
+    </sql>
     <select id="selectBoothList" resultMap="BoothResultMap">
         <include refid="baseSelect"/>
         <include refid="whereClause"/>
+        <include refid="orderClause"/>
     </select>
 
     <select id="selectBoothStatusCount" resultType="com.xmy.domain.dto.BoothStatusCount">

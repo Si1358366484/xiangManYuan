@@ -5,4 +5,5 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("xmy/dish")
 public class DishController {
+
 }
