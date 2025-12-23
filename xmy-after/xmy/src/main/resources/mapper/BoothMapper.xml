@@ -30,7 +30,7 @@
         <if test="dbstatus != null">and b.dbstatus = #{dbstatus}</if>
     </sql>
     <sql id="orderClause">
-        ORDER BY b.id DESC
+        ORDER BY b.update_time DESC, b.create_time DESC
     </sql>
     <select id="selectBoothList" resultMap="BoothResultMap">
         <include refid="baseSelect"/>
