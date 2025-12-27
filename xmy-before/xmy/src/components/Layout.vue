@@ -51,17 +51,29 @@
         </div>
       </div>
       
-      <!-- 卡座导航 -->
-      <div v-if="isHomePage" class="top-navigation">
-        <button 
-          v-for="item in boothTypeList" 
-          :key="item" 
-          class="nav-button" 
-          :class="{ active: boothType === item }"
-          @click="boothType = item"
-        >
-          {{ item }}
-        </button>
+      <!-- 动态顶部导航 -->
+      <div class="top-navigation">
+        <!-- 首页显示卡座类型 -->
+        <template v-if="isHomePage">
+          <button 
+            v-for="item in boothTypeList" 
+            :key="item" 
+            class="nav-button" 
+            :class="{ active: boothType === item }"
+            @click="boothType = item"
+          >
+            {{ item }}
+          </button>
+        </template>
+        
+        <!-- 账单页显示桌台信息 -->
+        <template v-else-if="isBillPage">
+          <div class="table-info-bar">
+            <div class="table-name">桌台卡5</div>
+            <div class="table-people">人数3</div>
+            <button class="modify-btn">修改</button>
+          </div>
+        </template>
       </div>
       
       <!-- 主内容区域 -->
@@ -132,6 +144,11 @@ const currentMenuLabel = computed(() => {
 // 判断是否为首页
 const isHomePage = computed(() => {
   return route.path === '/home'
+})
+
+// 判断是否为账单页
+const isBillPage = computed(() => {
+  return route.path === '/bill'
 })
 
 // 处理搜索 - 点击搜索按钮时触发
@@ -406,6 +423,7 @@ watch(() => route.path, () => {
   z-index: 99;
 }
 
+/* 首页卡座类型按钮 */
 .nav-button {
   padding: 8px 20px;
   background-color: transparent;
@@ -427,6 +445,43 @@ watch(() => route.path, () => {
   background-color: #ffd700;
   color: #000000;
   font-weight: 600;
+}
+
+/* 账单页桌台信息栏 */
+.table-info-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 20px;
+  background-color: transparent;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.table-name {
+  font-weight: 600;
+  color: #ffd700;
+}
+
+.table-people {
+  font-weight: 500;
+}
+
+.modify-btn {
+  padding: 4px 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.modify-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* 右侧内容容器样式 */

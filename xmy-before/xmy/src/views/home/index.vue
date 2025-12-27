@@ -1,4 +1,5 @@
 <template>
+  <!-- 卡座页 -->
   <div class="home-content">
     <!-- 网格布局 -->
     <div class="grid-container">
@@ -61,12 +62,16 @@
 
 <script setup>
 import { ref, onMounted, inject, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { getTableList, updateBoothInfo } from '@/api/home'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // 从父组件 Layout 接收卡座类型、搜索文本和搜索关键词
 const boothType = inject('boothType', ref('全部'))
 const searchKeyword = inject('searchKeyword', ref(''))
+
+// 初始化路由
+const router = useRouter()
 
 // 桌台列表（原始数据）
 const boothList = ref([]);
@@ -123,6 +128,10 @@ watch([boothType, searchKeyword], () => {
 
 // 改变卡座状态
 const changeBoothStatus = async (item) => {
+  if (item.boothStatus === '0') {
+    router.push('/bill')
+    return
+  }
   // 开台确认弹窗语句
   const confirmMessage = `确定要为【${item.boothName}】执行开台操作吗？`
   try {
