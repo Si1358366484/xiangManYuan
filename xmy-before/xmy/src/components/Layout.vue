@@ -69,6 +69,9 @@
         <!-- 账单页显示桌台信息 -->
         <template v-else-if="isBillPage">
           <div class="table-info-bar">
+            <button class="back-btn" @click="$router.go(-1)">
+              <img :src="leftArrowIcon" alt="返回" class="back-arrow-icon" />
+            </button>
             <div class="table-name">桌台卡5</div>
             <div class="table-people">人数3</div>
             <button class="modify-btn">修改</button>
@@ -90,6 +93,7 @@ import { useRoute } from 'vue-router'
 import { getTableList } from '@/api/home'
 import logoIcon from '@/assets/images/layout/icon.png'
 import arrowsIcon from '@/assets/images/layout/arrows.jpg'
+import leftArrowIcon from '@/assets/images/layout/leftArrow.png'
 
 const route = useRoute()
 
@@ -453,15 +457,41 @@ watch(() => route.path, () => {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 8px 20px;
+  padding: 8px 2px;
   background-color: transparent;
   color: #ffffff;
   font-size: 16px;
 }
 
+/* 返回按钮 */
+.back-btn {
+  padding: 4px 8px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 返回箭头图标 */
+.back-arrow-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .table-name {
   font-weight: 600;
-  color: #ffd700;
+  color: #e6e6e6;
 }
 
 .table-people {
@@ -493,42 +523,4 @@ watch(() => route.path, () => {
   background-color: transparent;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .layout-container {
-    flex-direction: column;
-  }
-  
-  .sidebar {
-    width: 100%;
-    height: auto;
-    margin: 0;
-    border-radius: 0;
-    padding: 15px;
-  }
-  
-  .menu-items {
-    flex-direction: row;
-    overflow-x: auto;
-    gap: 8px;
-    flex: none;
-  }
-  
-  .menu-item {
-    margin-bottom: 0;
-    white-space: nowrap;
-  }
-  
-  .top-bar {
-    padding: 0 15px;
-  }
-  
-  .search-box {
-    width: 200px;
-  }
-  
-  .username {
-    display: none;
-  }
-}
 </style>
