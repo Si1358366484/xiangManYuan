@@ -42,6 +42,24 @@ public class BoothController {
         }
     }
 
+    //新增卡座
+    @PostMapping
+    public AjaxResult addBooth(@RequestBody Booth booth) {
+        return AjaxResult.success(boothService.save(booth));
+    }
+    
+    //根据ID获取卡座
+    @GetMapping("/{id}")
+    public AjaxResult getBoothById(@PathVariable Long id) {
+        return AjaxResult.success(boothService.getById(id));
+    }
+    
+    //删除卡座
+    @DeleteMapping("/{id}")
+    public AjaxResult deleteBooth(@PathVariable Long id) {
+        return AjaxResult.success(boothService.removeById(id));
+    }
+    
     // ==================== 特殊处理逻辑 ====================
 
 }

@@ -1,5 +1,6 @@
 package com.xmy.service.Impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xmy.domain.entity.Booth;
 import com.xmy.domain.dto.BoothStatusCount;
 import com.xmy.mapper.BoothMapper;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BoothServiceImpl implements BoothService {
+public class BoothServiceImpl extends ServiceImpl<BoothMapper, Booth> implements BoothService {
     @Autowired
     private BoothMapper boothMapper;
     @Override
