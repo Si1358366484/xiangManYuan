@@ -9,9 +9,9 @@ public class BaseEntity {
     // 通用字段
     private Long id;
     // 审计字段
-    private Long createBy;
+    private String createBy;
     private Date createTime;
-    private Long updateBy;
+    private String updateBy;
     private Date updateTime;
     private Integer dbstatus;
 }
