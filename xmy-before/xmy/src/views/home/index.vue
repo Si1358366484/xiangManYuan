@@ -129,7 +129,7 @@ watch([boothType, searchKeyword], () => {
 // 改变卡座状态
 const changeBoothStatus = async (item) => {
   if (item.boothStatus === '0') {
-    router.push('/bill')
+    router.push({ path: '/bill', query: { boothName: item.boothName } })
     return
   }
   // 开台确认弹窗语句

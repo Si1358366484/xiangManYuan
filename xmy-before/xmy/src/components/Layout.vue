@@ -72,9 +72,8 @@
             <button class="back-btn" @click="$router.go(-1)">
               <img :src="leftArrowIcon" alt="返回" class="back-arrow-icon" />
             </button>
-            <div class="table-name">桌台卡5</div>
-            <div class="table-people">人数3</div>
-            <button class="modify-btn">修改</button>
+            <div class="table-name">桌台 {{ boothInfo.boothName }}</div>
+            <button class="modify-btn">人数: {{ boothInfo.people }}人 修改</button>
           </div>
         </template>
       </div>
@@ -96,6 +95,19 @@ import arrowsIcon from '@/assets/images/layout/arrows.jpg'
 import leftArrowIcon from '@/assets/images/layout/leftArrow.png'
 
 const route = useRoute()
+
+// 卡座信息
+const boothInfo = ref({
+  boothName: '', 
+  people: 0
+})
+
+// 监听路由参数变化，更新卡座信息
+watch(() => route.query, (newQuery) => {
+  if (newQuery.boothName) {
+    boothInfo.value.boothName = newQuery.boothName
+  }
+}, { immediate: true })
 
 // 搜索文本（用于给provide提供搜索文本）
 const searchText = ref('')
@@ -457,7 +469,7 @@ watch(() => route.path, () => {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 8px 2px;
+  padding: 3px 2px;
   background-color: transparent;
   color: #ffffff;
   font-size: 16px;
@@ -490,20 +502,16 @@ watch(() => route.path, () => {
 }
 
 .table-name {
-  font-weight: 600;
   color: #e6e6e6;
-}
-
-.table-people {
-  font-weight: 500;
 }
 
 .modify-btn {
   padding: 4px 12px;
   background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  color: #e6e6e6;
   font-size: 14px;
+  font-weight: normal;
   cursor: pointer;
   border-radius: 4px;
   transition: all 0.3s ease;
