@@ -525,7 +525,7 @@ watch(() => route.path, () => {
 /* 右侧内容容器样式 */
 .content-container {
   flex: 1;
-  padding: 8px 2px;
+  padding: 0px 2px;
   box-sizing: border-box;
   overflow: auto;
   background-color: transparent;
