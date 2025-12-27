@@ -14,9 +14,24 @@ public class DishController {
     @Autowired
     private DishService dishService;
     // ==================== 常规CRUD ====================
-    //获取卡座列表
     @GetMapping("/list")
     public AjaxResult getDishList(Dish dish) {
         return AjaxResult.success(dishService.list());
+    }
+    @GetMapping("/{id}")
+    public AjaxResult getDishById(@PathVariable Long id) {
+        return AjaxResult.success(dishService.getById(id));
+    }
+    @PostMapping
+    public AjaxResult addDish(@RequestBody Dish dish) {
+        return AjaxResult.success(dishService.save(dish));
+    }
+    @PutMapping
+    public AjaxResult updateDish(@RequestBody Dish dish) {
+        return AjaxResult.success(dishService.updateById(dish));
+    }
+    @DeleteMapping("/{id}")
+    public AjaxResult deleteDish(@PathVariable Long id) {
+        return AjaxResult.success(dishService.removeById(id));
     }
 }
