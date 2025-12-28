@@ -4,16 +4,16 @@
         <div class="left-area">
             区域1
         </div>
-        
-        <!-- 右侧区域（包含中间和右侧） -->
+        <!-- 右侧区域 -->
         <div class="right-area">
-            区域2
+            <DishComponent />
         </div>
     </div>
 </template>
 
 <script setup>
-
+// 导入dish组件
+import DishComponent from '@/components/dish/dish.vue'
 </script>
 
 <style scoped>
@@ -40,7 +40,6 @@
     background-color: white;
     border-radius: 8px 0 0 8px;
     margin-left: 3px;
-    padding: 20px;
     box-sizing: border-box;
 }
 </style>
