@@ -147,23 +147,24 @@ onMounted(() => {
 
 /* 网格项样式 */
 .grid-item {
-  aspect-ratio: 1.2;
+  aspect-ratio: 1.8;
   background-color: #ffffff;
   border-radius: 4px;
-  padding: 8px;
+  padding: 4px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  position: relative;
 }
 
 /* 菜品图片容器 */
 .dish-image {
   width: 100%;
-  height: 60%;
+  flex-grow: 4;
   background-color: #f0f0f0;
   border-radius: 4px;
   display: flex;
@@ -192,18 +193,27 @@ onMounted(() => {
   font-weight: 500;
   color: #333;
   margin-bottom: 4px;
-  text-align: center;
+  text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
 }
 
 /* 菜品价格 */
 .dish-price {
   font-size: 18px;
   font-weight: 600;
-  color: #dc3545;
-  margin-top: auto;
+  color: #ffffff;
+  background-color: #dc3545;
+  padding: 4px 8px;
+  border-radius: 4px;
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  margin: 0;
 }
 </style>
