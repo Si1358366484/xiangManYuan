@@ -25,7 +25,7 @@
 import { ref } from 'vue'
 
 // 导航列表
-const navList = ref(['全部', '大厅', '包间', '阳台'])
+const navList = ref(['全部', '锅底', '招牌菜', '荤菜', '素菜', '小吃', '饮品'])
 // 当前选中的导航项
 const currentNav = ref('全部')
 </script>
@@ -41,32 +41,34 @@ const currentNav = ref('全部')
   overflow: hidden;
 }
 
-/* 顶部导航样式 - 与Layout.vue保持一致 */
+/* 顶部导航样式 */
 .top-navigation {
   width: 100%;
-  background-color: #2a2a2a;
-  padding: 2px 2px;
+  background-color: #ffffff;
+  padding: 5px;
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  border-radius: 4px;
 }
 
-/* 导航按钮样式 - 与Layout.vue保持一致 */
+/* 导航按钮样式 */
 .nav-button {
-  padding: 8px 20px;
-  background-color: transparent;
+  padding: 8px 10px;
+  background-color: #e0e0e0;
   border: none;
-  color: #ffffff;
+  color: #333333;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   border-radius: 4px;
   transition: all 0.3s ease;
   white-space: nowrap;
+  margin-right: 4px;
 }
 
 .nav-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #d0d0d0;
 }
 
 .nav-button.active {
@@ -79,12 +81,12 @@ const currentNav = ref('全部')
 .dish-content {
   flex: 1;
   padding: 20px;
-  background-color: white;
+  background-color: #2A2A2A;
   overflow: auto;
 }
 
 .dish-content h3 {
   margin: 0 0 20px 0;
-  color: #333;
+  color: #ffffff;
 }
 </style>

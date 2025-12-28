@@ -37,7 +37,7 @@ import DishComponent from '@/components/dish/dish.vue'
 
 .right-area {
     width: 70%;
-    background-color: white;
+    background-color: #2A2A2A;
     border-radius: 8px 0 0 8px;
     margin-left: 3px;
     box-sizing: border-box;
