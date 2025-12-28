@@ -15,20 +15,38 @@
     
     <!-- 内容区域 -->
     <div class="dish-content">
-      <h3>当前选中: {{ currentNav }}</h3>
-      <!-- 这里可以根据currentNav的值显示不同的内容 -->
+      <!-- 网格布局 -->
+      <div class="grid-container">
+        <div 
+          v-for="(item, index) in dishList" 
+          :key="index"
+          class="grid-item"
+        >
+          <!-- 菜品图片 -->
+          <div class="dish-image">
+            <div class="no-image">暂无图片</div>
+          </div>
+          <!-- 菜品名称 -->
+          <div class="dish-name">{{ item.dishName }}</div>
+          <!-- 菜品价格 -->
+          <div class="dish-price">￥{{ item.dishPrice }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getDishCategoryList } from '@/api/dish'
+import { getDishCategoryList, getDishList } from '@/api/dish'
+import { ElMessage } from 'element-plus'
 
 // 导航列表
 const navList = ref(['全部'])
 // 当前选中的导航项
 const currentNav = ref('全部')
+// 菜品列表
+const dishList = ref([])
 
 // 获取菜品分类数据
 const fetchDishCategories = async () => {
@@ -40,12 +58,26 @@ const fetchDishCategories = async () => {
     navList.value = ['全部', ...categoryNames]
   } catch (error) {
     console.error('获取菜品分类失败:', error)
+    ElMessage.error('获取菜品分类失败，请稍后重试')
   }
 }
 
-// 组件挂载时获取分类数据
+// 获取菜品列表数据
+const fetchDishList = async () => {
+  try {
+    const response = await getDishList()
+    // 从response.data中获取菜品数组
+    dishList.value = response.data || []
+  } catch (error) {
+    console.error('获取菜品列表失败:', error)
+    ElMessage.error('获取菜品列表失败，请稍后重试')
+  }
+}
+
+// 组件挂载时获取数据
 onMounted(() => {
   fetchDishCategories()
+  fetchDishList()
 })
 </script>
 
@@ -99,13 +131,79 @@ onMounted(() => {
 /* 内容区域样式 */
 .dish-content {
   flex: 1;
-  padding: 20px;
   background-color: #2A2A2A;
   overflow: auto;
 }
 
-.dish-content h3 {
-  margin: 0 0 20px 0;
-  color: #ffffff;
+/* 网格布局样式 */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  padding: 4px 0;
+  gap: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 网格项样式 */
+.grid-item {
+  aspect-ratio: 1.2;
+  background-color: #ffffff;
+  border-radius: 4px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* 菜品图片容器 */
+.dish-image {
+  width: 100%;
+  height: 60%;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+/* 暂无图片样式 */
+.no-image {
+  color: #999;
+  font-size: 14px;
+}
+
+/* 菜品图片样式 */
+.dish-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 菜品名称 */
+.dish-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+/* 菜品价格 */
+.dish-price {
+  font-size: 18px;
+  font-weight: 600;
+  color: #dc3545;
+  margin-top: auto;
 }
 </style>

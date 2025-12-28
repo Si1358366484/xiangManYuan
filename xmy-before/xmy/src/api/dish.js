@@ -7,3 +7,11 @@ export const getDishCategoryList = () => {
     method: 'get'
   })
 }
+
+// 获取菜品列表
+export const getDishList = () => {
+  return request({
+    url: '/xmy/dish/list',
+    method: 'get'
+  })
+}
