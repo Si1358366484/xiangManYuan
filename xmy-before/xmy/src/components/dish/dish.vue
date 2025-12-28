@@ -132,7 +132,15 @@ onMounted(() => {
 .dish-content {
   flex: 1;
   background-color: #2A2A2A;
-  overflow: auto;
+  overflow-y: auto;
+  /* 隐藏滚动条 */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Chrome, Safari 和 Opera */
+.dish-content::-webkit-scrollbar {
+  display: none;
 }
 
 /* 网格布局样式 */
@@ -143,6 +151,7 @@ onMounted(() => {
   gap: 4px;
   width: 100%;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* 网格项样式 */
