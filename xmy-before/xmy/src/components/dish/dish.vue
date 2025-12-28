@@ -22,12 +22,31 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { getDishCategoryList } from '@/api/dish'
 
 // 导航列表
-const navList = ref(['全部', '锅底', '招牌菜', '荤菜', '素菜', '小吃', '饮品'])
+const navList = ref(['全部'])
 // 当前选中的导航项
 const currentNav = ref('全部')
+
+// 获取菜品分类数据
+const fetchDishCategories = async () => {
+  try {
+    const response = await getDishCategoryList()
+    // 从response.data中获取分类数组，提取categoryName字段
+    const categories = response.data || []
+    const categoryNames = categories.map(item => item.categoryName)
+    navList.value = ['全部', ...categoryNames]
+  } catch (error) {
+    console.error('获取菜品分类失败:', error)
+  }
+}
+
+// 组件挂载时获取分类数据
+onMounted(() => {
+  fetchDishCategories()
+})
 </script>
 
 <style scoped>
@@ -54,7 +73,7 @@ const currentNav = ref('全部')
 
 /* 导航按钮样式 */
 .nav-button {
-  padding: 8px 10px;
+  padding: 8px 20px;
   background-color: #e0e0e0;
   border: none;
   color: #333333;
