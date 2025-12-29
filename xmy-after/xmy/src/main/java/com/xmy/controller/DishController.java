@@ -34,4 +34,22 @@ public class DishController {
     public AjaxResult deleteDish(@PathVariable Long id) {
         return AjaxResult.success(dishService.removeById(id));
     }
+    /**
+     * 批量逻辑删除dish
+     */
+    @DeleteMapping("/batchDelete/{ids}")
+    public AjaxResult batchDeleteDish(@PathVariable("ids") Long[] ids) {
+        // 参数验证
+        if (ids == null || ids.length == 0) {
+            return AjaxResult.error("请选择要删除的菜品");
+        }
+        // 执行批量删除
+        int deletedCount = dishService.batchDeleteDish(ids);
+        // 检查删除结果
+        if (deletedCount <= 0) {
+            return AjaxResult.error("删除失败，未找到匹配的菜品记录");
+        }
+        // 返回成功结果
+        return AjaxResult.success("删除成功，共删除 " + deletedCount + " 条记录");
+    }
 }

@@ -18,4 +18,9 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     public List<Dish> getDishList(Dish dish) {
         return dishMapper.getDishList(dish);
     }
+
+    @Override
+    public int batchDeleteDish(Long[] ids) {
+        return dishMapper.batchDeleteDish(ids);
+    }
 }

@@ -36,5 +36,15 @@
         <include refid="whereClause"/>
         <!-- <include refid="orderClause"/> -->
     </select>
+    
+    <!-- 批量逻辑删除dish -->
+    <update id="batchDeleteDish">
+        UPDATE dish
+        SET dbstatus = 2
+        WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 
 </mapper>
