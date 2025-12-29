@@ -25,11 +25,11 @@
           <!-- 菜品图片 -->
           <div class="dish-image">
             <img :src="item.dishImage || noImage" alt="菜品图片" class="dish-img" />
+            <!-- 菜品价格 -->
+            <div class="dish-price">￥{{ item.dishPrice }}</div>
           </div>
           <!-- 菜品名称 -->
           <div class="dish-name">{{ item.dishName }}</div>
-          <!-- 菜品价格 -->
-          <div class="dish-price">￥{{ item.dishPrice }}</div>
         </div>
       </div>
     </div>
@@ -180,6 +180,7 @@ onMounted(() => {
   justify-content: center;
   margin-bottom: 8px;
   overflow: hidden;
+  position: relative;
 }
 
 /* 暂无图片样式 */
@@ -213,15 +214,14 @@ onMounted(() => {
 
 /* 菜品价格 */
 .dish-price {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 14px;
   color: #ffffff;
-  background-color: #dc3545;
-  padding: 4px 8px;
-  border-radius: 4px;
+  background-color: rgba(128, 128, 128, 0.5);
+  padding: 2px 4px;
+  border-radius: 0 4px 4px 4px;
   position: absolute;
-  bottom: 8px;
-  right: 8px;
+  bottom: 0;
+  right: 0;
   margin: 0;
 }
 </style>
