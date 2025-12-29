@@ -34,7 +34,7 @@
     <select id="getDishList" resultMap="DishResultMap">
         <include refid="baseSelect"/>
         <include refid="whereClause"/>
-        <include refid="orderClause"/>
+        <!-- <include refid="orderClause"/> -->
     </select>
 
 </mapper>

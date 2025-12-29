@@ -14,7 +14,7 @@ public class DishCategoryController {
     // ==================== 常规CRUD ====================
     @GetMapping("/list")
     public AjaxResult getDishCategoryList(DishCategory dishCategory) {
-        return AjaxResult.success(dishCategoryService.list());
+        return AjaxResult.success(dishCategoryService.getDishCategoryList(dishCategory));
     }
     @GetMapping("/{id}")
     public AjaxResult getDishCategoryById(@PathVariable Long id) {

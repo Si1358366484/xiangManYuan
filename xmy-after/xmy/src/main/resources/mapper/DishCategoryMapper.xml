@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmy.mapper.DishCategoryMapper">
+
+    <resultMap id="DishCategoryResultMap" type="com.xmy.domain.entity.DishCategory">
+        <id property="id" column="id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="dbstatus" column="dbstatus"/>
+    </resultMap>
+    <!--    通用查询sql-->
+    <sql id="baseSelect">
+        SELECT * from dish_category as dc where dc.dbstatus != 2
+    </sql>
+    <!--    通用过滤sql-->
+    <sql id="whereClause">
+        <if test="categoryName != null and categoryName != ''">and dc.category_name like CONCAT('%',#{categoryName},'%')</if>
+        <if test="dbstatus != null">and dc.dbstatus = #{dbstatus}</if>
+    </sql>
+    <sql id="orderClause">
+        ORDER BY dc.update_time DESC, dc.create_time DESC
+    </sql>
+    <select id="getDishCategoryList" resultMap="DishCategoryResultMap">
+        <include refid="baseSelect"/>
+        <include refid="whereClause"/>
+        <include refid="orderClause"/>
+    </select>
+
+</mapper>

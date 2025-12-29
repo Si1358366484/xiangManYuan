@@ -7,9 +7,15 @@ import com.xmy.service.DishCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DishCategoryServiceImpl extends ServiceImpl<DishCategoryMapper, DishCategory> implements DishCategoryService {
     @Autowired
     private DishCategoryMapper dishCategoryMapper;
 
+    @Override
+    public List<DishCategory> getDishCategoryList(DishCategory dishCategory) {
+        return dishCategoryMapper.getDishCategoryList(dishCategory);
+    }
 }
