@@ -14,4 +14,8 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     @Autowired
     private DishMapper dishMapper;
 
+    @Override
+    public List<Dish> getDishList(Dish dish) {
+        return dishMapper.getDishList(dish);
+    }
 }

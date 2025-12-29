@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmy.mapper.DishMapper">
+
+    <resultMap id="DishResultMap" type="com.xmy.domain.entity.Dish">
+        <id property="id" column="id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="dishName" column="dish_name"/>
+        <result property="dishPrice" column="dish_price"/>
+        <result property="dishImage" column="dish_image"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="dbstatus" column="dbstatus"/>
+    </resultMap>
+    <!--    通用查询sql-->
+    <sql id="baseSelect">
+        SELECT * from dish as d where d.dbstatus != 2
+    </sql>
+    <!--    通用过滤sql-->
+    <sql id="whereClause">
+        <if test="categoryId != null">and d.category_id = #{categoryId}</if>
+        <if test="dishName != null and dishName != ''">and d.dish_name like CONCAT('%',#{dishName},'%')</if>
+        <if test="dishPrice != null">and CAST(d.dish_price AS CHAR) like CONCAT('%',#{dishPrice},'%')</if>
+        <if test="dbstatus != null">and d.dbstatus = #{dbstatus}</if>
+    </sql>
+    <sql id="orderClause">
+        ORDER BY d.update_time DESC, d.create_time DESC
+    </sql>
+    <select id="getDishList" resultMap="DishResultMap">
+        <include refid="baseSelect"/>
+        <include refid="whereClause"/>
+        <include refid="orderClause"/>
+    </select>
+
+</mapper>
