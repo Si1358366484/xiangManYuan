@@ -40,7 +40,7 @@
 import { ref, onMounted } from 'vue'
 import { getDishCategoryList, getDishList } from '@/api/dish'
 import { ElMessage } from 'element-plus'
-import noImage from '@/assets/images/dish/noImage.png'
+import noImage from '@/assets/images/dish/test.png'
 
 // 导航列表
 const navList = ref(['全部'])
@@ -178,7 +178,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
+  margin-bottom: 0;
   overflow: hidden;
   position: relative;
 }
@@ -199,17 +199,15 @@ onMounted(() => {
 /* 菜品名称 */
 .dish-name {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #333;
-  margin-bottom: 4px;
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
+  display: block;
+  line-height: 1.2;
 }
 
 /* 菜品价格 */
