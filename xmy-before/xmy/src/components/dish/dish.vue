@@ -24,7 +24,7 @@
         >
           <!-- 菜品图片 -->
           <div class="dish-image">
-            <div class="no-image">暂无图片</div>
+            <img :src="item.dishImage || noImage" alt="菜品图片" class="dish-img" />
           </div>
           <!-- 菜品名称 -->
           <div class="dish-name">{{ item.dishName }}</div>
@@ -40,6 +40,7 @@
 import { ref, onMounted } from 'vue'
 import { getDishCategoryList, getDishList } from '@/api/dish'
 import { ElMessage } from 'element-plus'
+import noImage from '@/assets/images/dish/test.png'
 
 // 导航列表
 const navList = ref(['全部'])
@@ -156,7 +157,6 @@ onMounted(() => {
 
 /* 网格项样式 */
 .grid-item {
-  aspect-ratio: 1.8;
   background-color: #ffffff;
   border-radius: 4px;
   padding: 4px;
@@ -173,7 +173,6 @@ onMounted(() => {
 /* 菜品图片容器 */
 .dish-image {
   width: 100%;
-  flex-grow: 4;
   background-color: #f0f0f0;
   border-radius: 4px;
   display: flex;
@@ -193,12 +192,12 @@ onMounted(() => {
 .dish-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /* 菜品名称 */
 .dish-name {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: #333;
   margin-bottom: 4px;
