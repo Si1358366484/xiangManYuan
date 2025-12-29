@@ -28,4 +28,9 @@ public class BoothServiceImpl extends ServiceImpl<BoothMapper, Booth> implements
     public BoothStatusCount getBoothStatusCount() {
         return boothMapper.selectBoothStatusCount();
     }
+
+    @Override
+    public int batchDeleteBooth(Long[] ids) {
+        return boothMapper.batchDeleteBooth(ids);
+    }
 }

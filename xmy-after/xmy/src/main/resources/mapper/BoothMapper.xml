@@ -47,4 +47,14 @@
         FROM booth
         WHERE dbstatus != 2
     </select>
+    
+    <!-- 批量逻辑删除booth -->
+    <update id="batchDeleteBooth">
+        UPDATE booth
+        SET dbstatus = 2
+        WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 </mapper>

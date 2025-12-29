@@ -54,10 +54,21 @@ public class BoothController {
         return AjaxResult.success(boothService.getById(id));
     }
     
-    //删除卡座
-    @DeleteMapping("/{id}")
-    public AjaxResult deleteBooth(@PathVariable Long id) {
-        return AjaxResult.success(boothService.removeById(id));
+    //批量删除卡座
+    @DeleteMapping("/batchDelete/{ids}")
+    public AjaxResult batchDeleteBooth(@PathVariable("ids") Long[] ids) {
+        // 参数验证
+        if (ids == null || ids.length == 0) {
+            return AjaxResult.error("请选择要删除的卡座");
+        }
+        // 执行批量删除
+        int deletedCount = boothService.batchDeleteBooth(ids);
+        // 检查删除结果
+        if (deletedCount <= 0) {
+            return AjaxResult.error("删除失败，未找到匹配的卡座记录");
+        }
+        // 返回成功结果
+        return AjaxResult.success("删除成功，共删除 " + deletedCount + " 条记录");
     }
     
     // ==================== 特殊处理逻辑 ====================

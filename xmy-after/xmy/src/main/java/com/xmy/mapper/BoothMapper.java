@@ -13,5 +13,12 @@ public interface BoothMapper extends BaseMapper<Booth> {
 
     //获取卡座状态统计
     BoothStatusCount selectBoothStatusCount();
+    
+    /**
+     * 批量逻辑删除booth
+     * @param ids booth id数组
+     * @return 影响行数
+     */
+    int batchDeleteBooth(Long[] ids);
 
 }

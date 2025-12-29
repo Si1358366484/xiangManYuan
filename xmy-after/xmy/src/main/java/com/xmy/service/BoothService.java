@@ -12,4 +12,11 @@ public interface BoothService extends IService<Booth> {
     int updateBooth(Booth booth);
 
     BoothStatusCount getBoothStatusCount();
+    
+    /**
+     * 批量逻辑删除booth
+     * @param ids booth id数组
+     * @return 影响行数
+     */
+    int batchDeleteBooth(Long[] ids);
 }
