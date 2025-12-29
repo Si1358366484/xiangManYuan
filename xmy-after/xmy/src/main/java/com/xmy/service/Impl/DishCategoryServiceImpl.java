@@ -18,4 +18,9 @@ public class DishCategoryServiceImpl extends ServiceImpl<DishCategoryMapper, Dis
     public List<DishCategory> getDishCategoryList(DishCategory dishCategory) {
         return dishCategoryMapper.getDishCategoryList(dishCategory);
     }
+
+    @Override
+    public int batchDeleteDishCategory(Long[] ids) {
+        return dishCategoryMapper.batchDeleteDishCategory(ids);
+    }
 }
