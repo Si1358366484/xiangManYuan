@@ -37,7 +37,7 @@ public class DishController {
     /**
      * 批量逻辑删除dish
      */
-    @DeleteMapping("/batchDelete/{ids}")
+    @DeleteMapping("/{ids}")
     public AjaxResult batchDeleteDish(@PathVariable("ids") Long[] ids) {
         // 参数验证
         if (ids == null || ids.length == 0) {

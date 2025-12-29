@@ -55,7 +55,7 @@ public class BoothController {
     }
     
     //批量删除卡座
-    @DeleteMapping("/batchDelete/{ids}")
+    @DeleteMapping("/{ids}")
     public AjaxResult batchDeleteBooth(@PathVariable("ids") Long[] ids) {
         // 参数验证
         if (ids == null || ids.length == 0) {
