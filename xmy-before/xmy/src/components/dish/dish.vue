@@ -40,7 +40,7 @@
 import { ref, onMounted } from 'vue'
 import { getDishCategoryList, getDishList } from '@/api/dish'
 import { ElMessage } from 'element-plus'
-import noImage from '@/assets/images/dish/test.png'
+import noImage from '@/assets/images/dish/noImage.png'
 
 // 导航列表
 const navList = ref(['全部'])
