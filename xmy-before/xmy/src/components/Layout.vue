@@ -268,7 +268,7 @@ watch(() => route.path, () => {
 
 .menu-item.active {
   background-color: #3a3a3a;
-  color: #ffffff;
+  color: #ffd700;
   font-weight: 600;
 }
 
