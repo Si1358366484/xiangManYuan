@@ -18,13 +18,13 @@
     <!-- 按钮操作区域 -->
     <div class="button-group">
       <el-button type="primary" plain>
-        <i class="el-icon-plus"></i> 新增
+        <el-icon><Plus /></el-icon> 新增
       </el-button>
       <el-button type="success" plain>
-        <i class="el-icon-edit"></i> 修改
+        <el-icon><Edit /></el-icon> 修改
       </el-button>
       <el-button type="danger" plain>
-        <i class="el-icon-delete"></i> 删除
+        <el-icon><Delete /></el-icon> 删除
       </el-button>
     </div>
     
@@ -142,6 +142,24 @@
 :deep(.el-button) {
   margin-right: 8px;
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:deep(.el-button span) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:deep(.el-button .el-icon) {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+:deep(.el-button) {
+  vertical-align: middle;
 }
 
 :deep(.el-button--primary.is-plain) {
@@ -173,9 +191,10 @@
   background-color: #f0f2f5;
 }
 
+/* 表头单元格样式 */
 :deep(.el-table__header-wrapper th) {
   background-color: #f0f2f5;
-  font-weight: bold;
+  font-weight: 500;
   color: #303133;
   text-align: center;
   border-bottom: 1px solid #e4e7ed;
@@ -200,6 +219,7 @@
 </style>
 
 <script setup>
+import { Plus, Edit, Delete } from '@element-plus/icons-vue'
 // 模拟数据
 const tableData = [
   {
