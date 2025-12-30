@@ -115,8 +115,7 @@ const searchText = ref('')
 // 搜索占位符配置 - 根据路由动态显示
 const searchPlaceholderMap = {
   '/home': '搜索卡座名称...',
-  '/employees': '搜索员工姓名...',
-  '/promotions': '搜索优惠名称...'
+  '/dish_management': '搜索菜品名称...'
 }
 
 // 根据当前路由获取搜索占位符
@@ -141,8 +140,7 @@ provide('searchKeyword', searchKeyword)
 // 菜单项配置
 const menuItems = ref([
   { label: '首页', path: '/home' },
-  { label: '员工管理', path: '/employees' },
-  { label: '优惠管理', path: '/promotions' }
+  { label: '菜品管理', path: '/dish_management' }
   // 后续可以添加更多菜单项
 ])
 
