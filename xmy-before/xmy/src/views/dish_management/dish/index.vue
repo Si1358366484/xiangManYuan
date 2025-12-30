@@ -95,10 +95,8 @@
 .search-section {
   display: flex;
   align-items: center;
-  margin-bottom: 0;
   padding: 8px 16px;
   background-color: #ffffff;
-  border-radius: 0;
   border: 1px solid #e4e7ed;
   border-bottom: none;
 }
@@ -129,7 +127,6 @@
 
 /* 按钮操作区域 */
 .button-group {
-  margin-bottom: 0;
   display: flex;
   gap: 8px;
   padding: 12px 16px;
@@ -145,6 +142,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  vertical-align: middle;
 }
 
 :deep(.el-button span) {
@@ -155,10 +153,6 @@
 
 :deep(.el-button .el-icon) {
   margin-right: 4px;
-  vertical-align: middle;
-}
-
-:deep(.el-button) {
   vertical-align: middle;
 }
 
@@ -187,10 +181,6 @@
   border: 1px solid #e4e7ed;
 }
 
-:deep(.el-table__header-wrapper .el-table__header) {
-  background-color: #f0f2f5;
-}
-
 /* 表头单元格样式 */
 :deep(.el-table__header-wrapper th) {
   background-color: #f0f2f5;
@@ -211,10 +201,6 @@
 
 :deep(.el-table__row:nth-child(even)) {
   background-color: #fafafa;
-}
-
-:deep(.el-table__row:nth-child(odd)) {
-  background-color: #ffffff;
 }
 </style>
 
