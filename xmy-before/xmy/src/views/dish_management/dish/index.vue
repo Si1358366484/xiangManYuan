@@ -33,6 +33,7 @@
       :data="tableData"
       style="width: 100%"
       border
+      fit
       header-cell-class-name="table-header"
       row-class-name="table-row"
     >
@@ -77,7 +78,6 @@
       <el-table-column
         prop="lastOperationTime"
         label="最后操作时间"
-        width="180"
       />
     </el-table>
   </div>
@@ -88,6 +88,7 @@
   padding: 16px;
   background-color: #ffffff;
   min-height: 100vh;
+  box-sizing: border-box;
 }
 
 /* 搜索区域样式 */
