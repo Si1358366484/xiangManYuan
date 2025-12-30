@@ -7,7 +7,7 @@
         :key="item" 
         class="nav-button" 
         :class="{ active: currentNav === item }"
-        @click="currentNav = item"
+        @click="handleNavClick(item)"
       >
         {{ item }}
       </button>
@@ -44,18 +44,31 @@ import noImage from '@/assets/images/dish/test.png'
 
 // 导航列表
 const navList = ref(['全部'])
-// 当前选中的导航项
+// 分类ID映射
+const categoryIdMap = ref({ all: 'all' })
+// 当前选中的导航项（控制css变化）
 const currentNav = ref('全部')
 // 菜品列表
 const dishList = ref([])
+
+// 处理导航点击事件
+const handleNavClick = (navItem) => {
+  currentNav.value = navItem
+  const categoryId = navItem === '全部' ? undefined : categoryIdMap.value[navItem]
+  fetchDishList(categoryId)
+}
 
 // 获取菜品分类数据
 const fetchDishCategories = async () => {
   try {
     const response = await getDishCategoryList()
-    // 从response.data中获取分类数组，提取categoryName字段
+    // 从response.data中获取分类数组，提取categoryName字段和对应的ID
     const categories = response.data || []
-    const categoryNames = categories.map(item => item.categoryName)
+    const categoryNames = categories.map(item => {
+      const categoryId = item.id
+      categoryIdMap.value[item.categoryName] = categoryId
+      return item.categoryName
+    })
     navList.value = ['全部', ...categoryNames]
   } catch (error) {
     console.error('获取菜品分类失败:', error)
@@ -64,9 +77,10 @@ const fetchDishCategories = async () => {
 }
 
 // 获取菜品列表数据
-const fetchDishList = async () => {
+const fetchDishList = async (categoryId) => {
   try {
-    const response = await getDishList()
+    const params = categoryId ? { categoryId } : {}
+    const response = await getDishList(params)
     // 从response.data中获取菜品数组
     dishList.value = response.data || []
   } catch (error) {

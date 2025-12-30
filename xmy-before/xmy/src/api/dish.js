@@ -9,9 +9,10 @@ export const getDishCategoryList = () => {
 }
 
 // 获取菜品列表
-export const getDishList = () => {
+export const getDishList = (params) => {
   return request({
     url: '/xmy/dish/list',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
