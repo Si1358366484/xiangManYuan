@@ -56,8 +56,7 @@
           :key="column.prop"
           :prop="column.prop"
           :label="column.label"
-          :width="column.width"
-          :align="column.align"
+          :min-width="column.minWidth"
         >
           <template #default="scope">
             <!-- 价格类型 -->
@@ -77,6 +76,10 @@
             <template v-else-if="column.type === 'datetime'">
               {{ scope.row[column.prop] || scope.row.createTime }}
             </template>
+            <!-- 分类类型 -->
+            <template v-else-if="column.type === 'category'">
+              {{ getDictValue(categoryDict, scope.row[column.prop]) }}
+            </template>
             <!-- 默认类型 -->
             <template v-else>
               {{ scope.row[column.prop] }}
@@ -84,13 +87,6 @@
           </template>
         </el-table-column>
       </el-table>
-      
-      <!-- 空数据提示 -->
-      <el-empty
-        v-if="!loading && tableData.length === 0"
-        description="暂无数据"
-        class="empty-tip"
-      />
       
       <!-- 分页区域 -->
       <div class="pagination-section">
@@ -107,6 +103,120 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { Plus, Edit, Delete, RefreshRight } from '@element-plus/icons-vue'
+import { getDishList, getDishCategoryList } from '@/api/dish'
+import { ElMessage } from 'element-plus'
+import { tableColumns } from './columns'
+import { createDict, getDictValue } from '@/utils/dict'
+
+// 响应式数据
+// 表格数据
+const tableData = ref([])
+// 查询参数（包含分页参数）
+const queryParams = ref({
+  pageNum: 1,
+  pageSize: 7
+})
+// 总记录数
+const total = ref(0)
+// 加载状态
+const loading = ref(false)
+// 表格引用
+const dishTable = ref(null)
+// 选择状态
+const multipleSelection = ref([])
+const selectedDish = ref(null)
+// 菜品分类数据
+const categoryData = ref([])
+// 菜品分类字典
+const categoryDict = ref({})
+
+// 获取菜品分类数据
+const getCategoryList = async () => {
+  try {
+    const response = await getDishCategoryList()
+    // 从 response.data 中获取分类数组
+    categoryData.value = response.data
+    // 创建分类字典，使用 id 作为键字段
+    categoryDict.value = createDict(categoryData.value, 'id', 'categoryName')
+  } catch (error) {
+    ElMessage.error('获取菜品分类失败: ' + error)
+    categoryData.value = []
+    categoryDict.value = {}
+  }
+}
+
+// 获取菜品列表数据
+const getList = async () => {
+  loading.value = true
+  try {
+    // 调用分页查询 API
+    const response = await getDishList(queryParams.value)
+    // 直接使用后端返回的rows和total，与表格字段一一对应
+    tableData.value = response.rows || []
+    total.value = response.total || 0
+  } catch (error) {
+    ElMessage.error('获取数据失败: ' + error)
+    tableData.value = []
+    total.value = 0
+  } finally {
+    loading.value = false
+  }
+}
+
+// 搜索方法
+const handleSearch = () => {
+  // 搜索时重置到第一页
+  queryParams.value.pageNum = 1
+  getList()
+}
+
+// 重置方法
+const handleReset = () => {
+  // 重置查询参数
+  queryParams.value = {
+    pageNum: 1,
+    pageSize: queryParams.value.pageSize
+  }
+  getList()
+}
+
+// 分页大小变化
+const handleSizeChange = (val) => {
+  queryParams.value.pageSize = val
+  queryParams.value.pageNum = 1
+  getList()
+}
+
+// 当前页码变化
+const handleCurrentChange = (val) => {
+  queryParams.value.pageNum = val
+  getList()
+}
+
+// 行点击事件处理
+const handleRowClick = (row) => {
+  // 选中当前行
+  dishTable.value.toggleRowSelection(row, true)
+}
+
+// 选择变化事件处理
+const handleSelectionChange = (selection) => {
+  multipleSelection.value = selection
+  selectedDish.value = selection.length > 0 ? selection[selection.length - 1] : null
+}
+
+// 页面挂载时获取数据
+onMounted(async () => {
+  // 先获取菜品分类数据
+  await getCategoryList()
+  // 再获取菜品列表数据
+  getList()
+})
+</script>
 
 <style scoped>
 .dish-management {
@@ -248,96 +358,3 @@
   background-color: #fafafa;
 }
 </style>
-
-<script setup>
-import { ref, onMounted } from 'vue'
-import { Plus, Edit, Delete, RefreshRight } from '@element-plus/icons-vue'
-import { getDishList } from '@/api/dish'
-import { ElMessage } from 'element-plus'
-import { tableColumns } from './columns'
-
-// 响应式数据
-// 表格数据
-const tableData = ref([])
-// 查询参数（包含分页参数）
-const queryParams = ref({
-  pageNum: 1,
-  pageSize: 7
-})
-// 总记录数
-const total = ref(0)
-// 加载状态
-const loading = ref(false)
-// 表格引用
-const dishTable = ref(null)
-// 选择状态
-const multipleSelection = ref([])
-const selectedDish = ref(null)
-
-
-
-// 获取菜品列表数据
-const getList = async () => {
-  loading.value = true
-  try {
-    // 调用分页查询 API
-    const response = await getDishList(queryParams.value)
-    // 直接使用后端返回的rows和total，与表格字段一一对应
-    tableData.value = response.rows || []
-    total.value = response.total || 0
-  } catch (error) {
-    ElMessage.error('获取数据失败: ' + error)
-    tableData.value = []
-    total.value = 0
-  } finally {
-    loading.value = false
-  }
-}
-
-// 搜索方法
-const handleSearch = () => {
-  // 搜索时重置到第一页
-  queryParams.value.pageNum = 1
-  getList()
-}
-
-// 重置方法
-const handleReset = () => {
-  // 重置查询参数
-  queryParams.value = {
-    pageNum: 1,
-    pageSize: queryParams.value.pageSize
-  }
-  getList()
-}
-
-// 分页大小变化
-const handleSizeChange = (val) => {
-  queryParams.value.pageSize = val
-  queryParams.value.pageNum = 1
-  getList()
-}
-
-// 当前页码变化
-const handleCurrentChange = (val) => {
-  queryParams.value.pageNum = val
-  getList()
-}
-
-// 行点击事件处理
-const handleRowClick = (row) => {
-  // 选中当前行
-  dishTable.value.toggleRowSelection(row, true)
-}
-
-// 选择变化事件处理
-const handleSelectionChange = (selection) => {
-  multipleSelection.value = selection
-  selectedDish.value = selection.length > 0 ? selection[selection.length - 1] : null
-}
-
-// 页面挂载时获取数据
-onMounted(() => {
-  getList()
-})
-</script>

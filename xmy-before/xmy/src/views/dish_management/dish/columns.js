@@ -3,28 +3,30 @@ export const tableColumns = [
   {
     prop: 'dishName',
     label: '菜品名称',
-    width: 180
+    minWidth: 150
   },
   {
     prop: 'categoryId',
     label: '菜品分类',
-    width: 140
+    minWidth: 120,
+    type: 'category'
   },
   {
     prop: 'dishPrice',
     label: '售价',
-    width: 120,
+    minWidth: 100,
     type: 'price'
   },
   {
     prop: 'dbstatus',
     label: '售卖状态',
-    width: 140,
+    minWidth: 120,
     type: 'status'
   },
   {
     prop: 'updateTime',
     label: '最后操作时间',
+    minWidth: 180,
     type: 'datetime'
   }
 ]
