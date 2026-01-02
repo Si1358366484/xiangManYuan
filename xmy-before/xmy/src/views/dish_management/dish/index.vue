@@ -52,45 +52,35 @@
           width="55"
         />
         <el-table-column
-          prop="dishName"
-          label="菜品名称"
-          width="180"
-        />
-        <!-- <el-table-column
-          prop="categoryId"
-          label="菜品分类"
-          width="150"
-        /> -->
-        <el-table-column
-          prop="dishPrice"
-          label="售价"
-          width="120"
-          align="right"
+          v-for="column in tableColumns"
+          :key="column.prop"
+          :prop="column.prop"
+          :label="column.label"
+          :width="column.width"
+          :align="column.align"
         >
           <template #default="scope">
-            ¥{{ scope.row.dishPrice }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="dbstatus"
-          label="售卖状态"
-          width="140"
-        >
-          <template #default="scope">
-            <el-tag
-              :type="scope.row.dbstatus === 1 ? 'success' : 'danger'"
-              size="small"
-            >
-              {{ scope.row.dbstatus === 1 ? '启售' : '停售' }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="updateTime"
-          label="最后操作时间"
-        >
-          <template #default="scope">
-            {{ scope.row.updateTime || scope.row.createTime }}
+            <!-- 价格类型 -->
+            <template v-if="column.type === 'price'">
+              ¥{{ scope.row[column.prop] }}
+            </template>
+            <!-- 状态类型 -->
+            <template v-else-if="column.type === 'status'">
+              <el-tag
+                :type="scope.row[column.prop] === 1 ? 'success' : 'danger'"
+                size="small"
+              >
+                {{ scope.row[column.prop] === 1 ? '启售' : '停售' }}
+              </el-tag>
+            </template>
+            <!-- 日期时间类型 -->
+            <template v-else-if="column.type === 'datetime'">
+              {{ scope.row[column.prop] || scope.row.createTime }}
+            </template>
+            <!-- 默认类型 -->
+            <template v-else>
+              {{ scope.row[column.prop] }}
+            </template>
           </template>
         </el-table-column>
       </el-table>
@@ -264,6 +254,7 @@ import { ref, onMounted } from 'vue'
 import { Plus, Edit, Delete, RefreshRight } from '@element-plus/icons-vue'
 import { getDishList } from '@/api/dish'
 import { ElMessage } from 'element-plus'
+import { tableColumns } from './columns'
 
 // 响应式数据
 // 表格数据
@@ -271,8 +262,7 @@ const tableData = ref([])
 // 查询参数（包含分页参数）
 const queryParams = ref({
   pageNum: 1,
-  pageSize: 10,
-  name: ''
+  pageSize: 7
 })
 // 总记录数
 const total = ref(0)
@@ -283,6 +273,8 @@ const dishTable = ref(null)
 // 选择状态
 const multipleSelection = ref([])
 const selectedDish = ref(null)
+
+
 
 // 获取菜品列表数据
 const getList = async () => {
@@ -314,8 +306,7 @@ const handleReset = () => {
   // 重置查询参数
   queryParams.value = {
     pageNum: 1,
-    pageSize: queryParams.value.pageSize,
-    name: ''
+    pageSize: queryParams.value.pageSize
   }
   getList()
 }
