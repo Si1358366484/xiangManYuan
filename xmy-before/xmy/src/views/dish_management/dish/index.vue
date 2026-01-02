@@ -205,64 +205,25 @@
 </style>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import { Plus, Edit, Delete } from '@element-plus/icons-vue'
-// 模拟数据
-const tableData = [
-  {
-    name: '测试菜品',
-    category: '辣味烤鱼',
-    price: 38,
-    status: '停售',
-    lastOperationTime: '2022-09-20 19:11'
-  },
-  {
-    name: '平锅草鱼汤',
-    category: '汤类',
-    price: 6,
-    status: '启售',
-    lastOperationTime: '2022-06-10 10:55'
-  },
-  {
-    name: '鸡蛋汤',
-    category: '汤类',
-    price: 4,
-    status: '启售',
-    lastOperationTime: '2022-06-10 10:54'
-  },
-  {
-    name: '烤鱼2斤',
-    category: '辣味烤鱼',
-    price: 72,
-    status: '启售',
-    lastOperationTime: '2022-06-10 10:43'
-  },
-  {
-    name: '江团鱼2斤',
-    category: '辣味烤鱼',
-    price: 119,
-    status: '启售',
-    lastOperationTime: '2022-06-10 10:42'
-  },
-  {
-    name: '草鱼鱼2斤',
-    category: '辣味烤鱼',
-    price: 68,
-    status: '启售',
-    lastOperationTime: '2022-06-10 10:41'
-  },
-  {
-    name: '馋嘴牛蛙',
-    category: '辣味牛蛙',
-    price: 68,
-    status: '启售',
-    lastOperationTime: '2022-06-10 10:37'
-  },
-  {
-    name: '香辣牛蛙',
-    category: '辣味牛蛙',
-    price: 88,
-    status: '启售',
-    lastOperationTime: '2022-06-10 10:35'
+import { getDishList } from '@/api/dish'
+import { ElMessage } from 'element-plus'
+
+const tableData = ref([])
+
+// 获取菜品列表数据
+const fetchDishList = async () => {
+  try {
+    const response = await getDishList()
+    tableData.value = response.data
+  } catch (error) {
+    ElMessage.error('获取数据失败: ' + error)
   }
-];
+}
+
+// 页面挂载时获取数据
+onMounted(() => {
+  fetchDishList()
+})
 </script>

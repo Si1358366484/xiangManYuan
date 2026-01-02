@@ -2,6 +2,7 @@ package com.xmy.controller;
 
 import com.xmy.domain.common.AjaxResult;
 import com.xmy.domain.entity.Dish;
+import com.xmy.domain.page.TableDataInfo;
 import com.xmy.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +11,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("xmy/dish")
-public class DishController {
+public class DishController extends BaseController {
     @Autowired
     private DishService dishService;
     // ==================== 常规CRUD ====================
     @GetMapping("/list")
-    public AjaxResult getDishList(Dish dish) {
-        return AjaxResult.success(dishService.getDishList(dish));
+    public TableDataInfo getDishList(Dish dish) {
+        // 开启分页
+        startPage();
+        // 调用service层方法获取数据
+        List<Dish> list = dishService.getDishList(dish);
+        // 返回分页结果
+        return getDataTable(list);
     }
     @GetMapping("/{id}")
     public AjaxResult getDishById(@PathVariable Long id) {
