@@ -5,13 +5,16 @@
       <div class="search-item">
         <label class="search-label">菜品名称</label>
         <el-input
+          v-model="queryParams.name"
           placeholder="请输入菜品名称"
           class="search-input"
+          clearable
+          @keyup.enter="handleSearch"
         />
       </div>
       <div class="search-buttons">
-        <el-button type="primary">搜索</el-button>
-        <el-button type="default">重置</el-button>
+        <el-button type="primary" @click="handleSearch">搜索</el-button>
+        <el-button type="default" @click="handleReset">重置</el-button>
       </div>
     </div>
     
@@ -29,57 +32,78 @@
     </div>
     
     <!-- 表格区域 -->
-    <el-table
-      :data="tableData"
-      style="width: 100%"
-      border
-      fit
-      header-cell-class-name="table-header"
-      row-class-name="table-row"
-    >
-      <el-table-column
-        type="selection"
-        width="55"
-      />
-      <el-table-column
-        prop="name"
-        label="菜品名称"
-        width="180"
-      />
-      <el-table-column
-        prop="category"
-        label="菜品分类"
-        width="150"
-      />
-      <el-table-column
-        prop="price"
-        label="售价"
-        width="120"
-        align="right"
+    <div class="table-section">
+      <el-table
+        v-loading="loading"
+        :data="tableData"
+        style="width: 100%"
+        border
+        fit
       >
-        <template #default="scope">
-          ¥{{ scope.row.price }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="status"
-        label="售卖状态"
-        width="140"
-      >
-        <template #default="scope">
-          <el-tag
-            :type="scope.row.status === '启售' ? 'success' : 'danger'"
-            size="small"
-          >
-            {{ scope.row.status }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="lastOperationTime"
-        label="最后操作时间"
+        <el-table-column
+          type="selection"
+          width="55"
+        />
+        <el-table-column
+          prop="name"
+          label="菜品名称"
+          width="180"
+        />
+        <el-table-column
+          prop="category"
+          label="菜品分类"
+          width="150"
+        />
+        <el-table-column
+          prop="price"
+          label="售价"
+          width="120"
+          align="right"
+        >
+          <template #default="scope">
+            ¥{{ scope.row.price }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="status"
+          label="售卖状态"
+          width="140"
+        >
+          <template #default="scope">
+            <el-tag
+              :type="scope.row.status === '启售' ? 'success' : 'danger'"
+              size="small"
+            >
+              {{ scope.row.status }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="lastOperationTime"
+          label="最后操作时间"
+        />
+      </el-table>
+      
+      <!-- 空数据提示 -->
+      <el-empty
+        v-if="!loading && tableData.length === 0"
+        description="暂无数据"
+        class="empty-tip"
       />
-    </el-table>
+      
+      <!-- 分页区域 -->
+      <div class="pagination-section">
+        <el-pagination
+          v-model:current-page="queryParams.pageNum"
+          v-model:page-size="queryParams.pageSize"
+          :page-sizes="[5, 10, 15, 20]"
+          :total="total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -135,6 +159,27 @@
   border-bottom: none;
 }
 
+/* 表格区域样式 */
+.table-section {
+  background-color: #ffffff;
+  border: 1px solid #e4e7ed;
+}
+
+/* 空数据提示样式 */
+.empty-tip {
+  padding: 60px 0;
+}
+
+/* 分页区域样式 */
+.pagination-section {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border-top: 1px solid #e4e7ed;
+}
+
 /* 按钮样式调整 */
 :deep(.el-button) {
   margin-right: 8px;
@@ -178,10 +223,9 @@
 :deep(.el-table) {
   border-radius: 0;
   overflow: hidden;
-  border: 1px solid #e4e7ed;
+  border: none;
 }
 
-/* 表头单元格样式 */
 :deep(.el-table__header-wrapper th) {
   background-color: #f0f2f5;
   font-weight: 500;
@@ -210,20 +254,71 @@ import { Plus, Edit, Delete } from '@element-plus/icons-vue'
 import { getDishList } from '@/api/dish'
 import { ElMessage } from 'element-plus'
 
+// 响应式数据
+// 表格数据
 const tableData = ref([])
+// 查询参数（包含分页参数）
+const queryParams = ref({
+  pageNum: 1,
+  pageSize: 10,
+  name: ''
+})
+// 总记录数
+const total = ref(0)
+// 加载状态
+const loading = ref(false)
 
 // 获取菜品列表数据
-const fetchDishList = async () => {
+const getList = async () => {
+  loading.value = true
   try {
-    const response = await getDishList()
-    tableData.value = response.data
+    // 调用分页查询 API
+    const response = await getDishList(queryParams.value)
+    // 适配后端返回格式：{ records: [], total: 0 }
+    tableData.value = response.data.records || response.data.rows || []
+    total.value = response.data.total || 0
   } catch (error) {
     ElMessage.error('获取数据失败: ' + error)
+    tableData.value = []
+    total.value = 0
+  } finally {
+    loading.value = false
   }
+}
+
+// 搜索方法
+const handleSearch = () => {
+  // 搜索时重置到第一页
+  queryParams.value.pageNum = 1
+  getList()
+}
+
+// 重置方法
+const handleReset = () => {
+  // 重置查询参数
+  queryParams.value = {
+    pageNum: 1,
+    pageSize: queryParams.value.pageSize,
+    name: ''
+  }
+  getList()
+}
+
+// 分页大小变化
+const handleSizeChange = (val) => {
+  queryParams.value.pageSize = val
+  queryParams.value.pageNum = 1
+  getList()
+}
+
+// 当前页码变化
+const handleCurrentChange = (val) => {
+  queryParams.value.pageNum = val
+  getList()
 }
 
 // 页面挂载时获取数据
 onMounted(() => {
-  fetchDishList()
+  getList()
 })
 </script>

@@ -15,6 +15,9 @@ public class DishController extends BaseController {
     @Autowired
     private DishService dishService;
     // ==================== 常规CRUD ====================
+    /**
+     * 分页获取菜品列表
+     */
     @GetMapping("/list")
     public TableDataInfo getDishList(Dish dish) {
         // 开启分页
@@ -23,6 +26,14 @@ public class DishController extends BaseController {
         List<Dish> list = dishService.getDishList(dish);
         // 返回分页结果
         return getDataTable(list);
+    }
+
+    /**
+     * 获取所有菜品列表
+     */
+    @GetMapping("/list/all")
+    public AjaxResult getAllDishList(Dish dish) {
+        return AjaxResult.success(dishService.getDishList(dish));
     }
     @GetMapping("/{id}")
     public AjaxResult getDishById(@PathVariable Long id) {

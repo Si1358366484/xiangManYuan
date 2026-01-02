@@ -38,7 +38,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getDishCategoryList, getDishList } from '@/api/dish'
+import { getDishCategoryList, getDishListAll } from '@/api/dish'
 import { ElMessage } from 'element-plus'
 import noImage from '@/assets/images/dish/test.png'
 
@@ -80,7 +80,7 @@ const fetchDishCategories = async () => {
 const fetchDishList = async (categoryId) => {
   try {
     const params = categoryId ? { categoryId } : {}
-    const response = await getDishList(params)
+    const response = await getDishListAll(params)
     // 从response.data中获取菜品数组
     dishList.value = response.data || []
   } catch (error) {

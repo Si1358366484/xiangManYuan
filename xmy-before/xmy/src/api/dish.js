@@ -16,3 +16,12 @@ export const getDishList = (params) => {
     params
   })
 }
+
+// 获取所有菜品列表（专用）
+export const getDishListAll = (params) => {
+  return request({
+    url: '/xmy/dish/list/all',
+    method: 'get',
+    params
+  })
+}
