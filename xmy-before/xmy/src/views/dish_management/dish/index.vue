@@ -29,6 +29,9 @@
       <el-button type="danger" plain>
         <el-icon><Delete /></el-icon> 删除
       </el-button>
+      <el-button type="warning" plain>
+        <el-icon><RefreshRight /></el-icon> 状态切换
+      </el-button>
     </div>
     
     <!-- 表格区域 -->
@@ -258,7 +261,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Plus, Edit, Delete } from '@element-plus/icons-vue'
+import { Plus, Edit, Delete, RefreshRight } from '@element-plus/icons-vue'
 import { getDishList } from '@/api/dish'
 import { ElMessage } from 'element-plus'
 
@@ -332,9 +335,7 @@ const handleCurrentChange = (val) => {
 
 // 行点击事件处理
 const handleRowClick = (row) => {
-  // 先取消所有选中
-  //dishTable.value.clearSelection()
-  // 然后选中当前行
+  // 选中当前行
   dishTable.value.toggleRowSelection(row, true)
 }
 
