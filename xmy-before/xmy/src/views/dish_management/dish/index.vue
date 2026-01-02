@@ -45,43 +45,47 @@
           width="55"
         />
         <el-table-column
-          prop="name"
+          prop="dishName"
           label="菜品名称"
           width="180"
         />
-        <el-table-column
-          prop="category"
+        <!-- <el-table-column
+          prop="categoryId"
           label="菜品分类"
           width="150"
-        />
+        /> -->
         <el-table-column
-          prop="price"
+          prop="dishPrice"
           label="售价"
           width="120"
           align="right"
         >
           <template #default="scope">
-            ¥{{ scope.row.price }}
+            ¥{{ scope.row.dishPrice }}
           </template>
         </el-table-column>
         <el-table-column
-          prop="status"
+          prop="dbstatus"
           label="售卖状态"
           width="140"
         >
           <template #default="scope">
             <el-tag
-              :type="scope.row.status === '启售' ? 'success' : 'danger'"
+              :type="scope.row.dbstatus === 1 ? 'success' : 'danger'"
               size="small"
             >
-              {{ scope.row.status }}
+              {{ scope.row.dbstatus === 1 ? '启售' : '停售' }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column
-          prop="lastOperationTime"
+          prop="updateTime"
           label="最后操作时间"
-        />
+        >
+          <template #default="scope">
+            {{ scope.row.updateTime || scope.row.createTime }}
+          </template>
+        </el-table-column>
       </el-table>
       
       <!-- 空数据提示 -->
@@ -274,9 +278,9 @@ const getList = async () => {
   try {
     // 调用分页查询 API
     const response = await getDishList(queryParams.value)
-    // 适配后端返回格式：{ records: [], total: 0 }
-    tableData.value = response.data.records || response.data.rows || []
-    total.value = response.data.total || 0
+    // 直接使用后端返回的rows和total，与表格字段一一对应
+    tableData.value = response.rows || []
+    total.value = response.total || 0
   } catch (error) {
     ElMessage.error('获取数据失败: ' + error)
     tableData.value = []
