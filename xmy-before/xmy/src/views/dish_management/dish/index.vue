@@ -23,13 +23,13 @@
       <el-button type="primary" plain>
         <el-icon><Plus /></el-icon> 新增
       </el-button>
-      <el-button type="success" plain>
+      <el-button type="success" plain :disabled="multipleSelection.length !== 1">
         <el-icon><Edit /></el-icon> 修改
       </el-button>
-      <el-button type="danger" plain>
-        <el-icon><Delete /></el-icon> 删除
+      <el-button type="danger" plain :disabled="multipleSelection.length === 0">
+        <el-icon><Delete /></el-icon> {{ multipleSelection.length > 1 ? '批量删除' : '删除' }}
       </el-button>
-      <el-button type="warning" plain>
+      <el-button type="warning" plain :disabled="multipleSelection.length !== 1">
         <el-icon><RefreshRight /></el-icon> 状态切换
       </el-button>
     </div>
