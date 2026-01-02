@@ -134,9 +134,7 @@ const tableData = ref([])
 // 查询参数（包含分页参数）
 const queryParams = ref({
   pageNum: 1,
-  pageSize: 7,
-  name: '',
-  categoryId: ''
+  pageSize: 7
 })
 // 总记录数
 const total = ref(0)
@@ -197,9 +195,7 @@ const handleReset = () => {
   // 重置查询参数
   queryParams.value = {
     pageNum: 1,
-    pageSize: queryParams.value.pageSize,
-    name: '',
-    categoryId: ''
+    pageSize: queryParams.value.pageSize
   }
   getList()
 }

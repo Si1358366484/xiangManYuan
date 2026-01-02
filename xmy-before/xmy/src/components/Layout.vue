@@ -33,7 +33,7 @@
             />
             <span v-if="isMenuCollapsed" class="current-menu-label">{{ currentMenuLabel }}</span>
           </div>
-          <div class="search-box">
+          <div class="search-box" v-if="route.path === '/home'">
             <input 
               type="text" 
               :placeholder="searchPlaceholder" 
@@ -112,16 +112,18 @@ watch(() => route.query, (newQuery) => {
 // 搜索文本（用于给provide提供搜索文本）
 const searchText = ref('')
 
-// 搜索占位符配置 - 根据路由动态显示
-const searchPlaceholderMap = {
+// 搜索占位符配置 - 根据路由动态显示（注释保留）
+/* const searchPlaceholderMap = {
   '/home': '搜索卡座名称...',
   '/dish_management': '搜索菜品名称...'
-}
+}*/
 
 // 根据当前路由获取搜索占位符
 const searchPlaceholder = computed(() => {
-  return searchPlaceholderMap[route.path] || '搜索...'
+  //return searchPlaceholderMap[route.path] || '搜索...'
+  return '搜索卡座名称...'
 })
+
 
 // 菜单折叠状态
 const isMenuCollapsed = ref(true)
