@@ -39,6 +39,10 @@
         style="width: 100%"
         border
         fit
+        ref="dishTable"
+        @row-click="handleRowClick"
+        @selection-change="handleSelectionChange"
+        highlight-current-row
       >
         <el-table-column
           type="selection"
@@ -271,6 +275,11 @@ const queryParams = ref({
 const total = ref(0)
 // 加载状态
 const loading = ref(false)
+// 表格引用
+const dishTable = ref(null)
+// 选择状态
+const multipleSelection = ref([])
+const selectedDish = ref(null)
 
 // 获取菜品列表数据
 const getList = async () => {
@@ -319,6 +328,20 @@ const handleSizeChange = (val) => {
 const handleCurrentChange = (val) => {
   queryParams.value.pageNum = val
   getList()
+}
+
+// 行点击事件处理
+const handleRowClick = (row) => {
+  // 先取消所有选中
+  //dishTable.value.clearSelection()
+  // 然后选中当前行
+  dishTable.value.toggleRowSelection(row, true)
+}
+
+// 选择变化事件处理
+const handleSelectionChange = (selection) => {
+  multipleSelection.value = selection
+  selectedDish.value = selection.length > 0 ? selection[selection.length - 1] : null
 }
 
 // 页面挂载时获取数据
