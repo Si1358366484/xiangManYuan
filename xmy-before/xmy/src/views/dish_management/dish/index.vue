@@ -12,6 +12,22 @@
           @keyup.enter="handleSearch"
         />
       </div>
+      <div class="search-item">
+        <label class="search-label">菜品分类</label>
+        <el-select
+          v-model="queryParams.categoryId"
+          placeholder="请选择菜品分类"
+          class="search-input"
+          clearable
+        >
+          <el-option
+            v-for="(categoryName, categoryId) in categoryDict"
+            :key="categoryId"
+            :label="categoryName"
+            :value="categoryId.toString()"
+          />
+        </el-select>
+      </div>
       <div class="search-buttons">
         <el-button type="primary" @click="handleSearch">搜索</el-button>
         <el-button type="default" @click="handleReset">重置</el-button>
@@ -118,7 +134,9 @@ const tableData = ref([])
 // 查询参数（包含分页参数）
 const queryParams = ref({
   pageNum: 1,
-  pageSize: 7
+  pageSize: 7,
+  name: '',
+  categoryId: ''
 })
 // 总记录数
 const total = ref(0)
@@ -179,7 +197,9 @@ const handleReset = () => {
   // 重置查询参数
   queryParams.value = {
     pageNum: 1,
-    pageSize: queryParams.value.pageSize
+    pageSize: queryParams.value.pageSize,
+    name: '',
+    categoryId: ''
   }
   getList()
 }
