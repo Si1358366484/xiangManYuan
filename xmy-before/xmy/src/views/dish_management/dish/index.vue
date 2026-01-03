@@ -39,7 +39,7 @@
       <el-button type="primary" plain @click="handleAddClick">
         <el-icon><Plus /></el-icon> 新增
       </el-button>
-      <el-button type="success" plain :disabled="multipleSelection.length !== 1">
+      <el-button type="success" plain :disabled="multipleSelection.length !== 1" @click="handleEditClick">
         <el-icon><Edit /></el-icon> 修改
       </el-button>
       <el-button type="danger" plain :disabled="multipleSelection.length === 0" @click="handleDelete">
@@ -119,10 +119,10 @@
     </div>
   </div>
 
-  <!-- 新增菜品弹窗 -->
+  <!-- 新增/修改菜品弹窗 -->
   <el-dialog
     v-model="dialogVisible"
-    title="新增菜品"
+    :title="dialogMode === 'add' ? '新增菜品' : '修改菜品'"
     width="500px"
     :before-close="handleClose"
   >
@@ -183,7 +183,7 @@
     <template #footer>
       <div style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding: 10px 20px 20px;">
         <el-button @click="handleClose">取消</el-button>
-        <el-button type="primary" @click="handleAdd">确定</el-button>
+        <el-button type="primary" @click="handleSave">确定</el-button>
       </div>
     </template>
   </el-dialog>
@@ -221,6 +221,8 @@ const categoryDict = ref({})
 
 // 新增弹窗相关数据
 const dialogVisible = ref(false)
+// 弹窗模式：add - 新增，edit - 修改
+const dialogMode = ref('add')
 // 表单数据
 const formData = ref({
   dishName: '',
@@ -382,6 +384,8 @@ const handleStatusChange = async () => {
 
 // 打开新增弹窗
 const handleAddClick = () => {
+  // 设置弹窗模式为新增
+  dialogMode.value = 'add'
   // 重置表单数据
   formData.value = {
     dishName: '',
@@ -393,14 +397,32 @@ const handleAddClick = () => {
   dialogVisible.value = true
 }
 
+// 打开修改弹窗
+const handleEditClick = () => {
+  // 获取当前选中的菜品
+  const selectedDish = multipleSelection.value[0]
+  if (selectedDish) {
+    // 设置弹窗模式为修改
+    dialogMode.value = 'edit'
+    // 填充表单数据
+    formData.value = {
+      ...selectedDish,
+      dishPrice: selectedDish.dishPrice.toString(),
+      categoryId: selectedDish.categoryId.toString()
+    }
+    // 显示弹窗
+    dialogVisible.value = true
+  }
+}
+
 // 关闭弹窗
 const handleClose = () => {
   // 隐藏弹窗
   dialogVisible.value = false
 }
 
-// 新增菜品
-const handleAdd = async () => {
+// 保存菜品（新增或修改）
+const handleSave = async () => {
   try {
     // 准备提交数据，将dishPrice转换为数字
     const submitData = {
@@ -408,18 +430,28 @@ const handleAdd = async () => {
       dishPrice: Number(formData.value.dishPrice),
       dbstatus: 1
     }
-    // 调用新增API
-    await addDish(submitData)
+    
+    // 根据弹窗模式调用不同的API
+    if (dialogMode.value === 'add') {
+      // 新增时添加dbstatus字段
+      await addDish(submitData)
+      ElMessage.success('新增菜品成功')
+    } else {
+      // 修改时调用更新API
+      await updateDish(submitData)
+      ElMessage.success('修改菜品成功')
+    }
+    
     // 关闭弹窗
     dialogVisible.value = false
     // 刷新列表
     getList()
-    // 显示成功消息
-    ElMessage.success('新增菜品成功')
   } catch (error) {
-    ElMessage.error('新增菜品失败: ' + error)
+    ElMessage.error(dialogMode.value === 'add' ? '新增菜品失败: ' + error : '修改菜品失败: ' + error)
   }
 }
+
+
 
 // 页面挂载时获取数据
 onMounted(async () => {
