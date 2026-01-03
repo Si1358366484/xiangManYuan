@@ -6,6 +6,7 @@ import com.xmy.service.DishCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 @RestController
 @RequestMapping("xmy/dishCategory")
 public class DishCategoryController {
@@ -22,10 +23,18 @@ public class DishCategoryController {
     }
     @PostMapping
     public AjaxResult addDishCategory(@RequestBody DishCategory dishCategory) {
+        // 设置创建人和更新人为admin，时间为当前时间
+        dishCategory.setCreateBy("admin");
+        dishCategory.setUpdateBy("admin");
+        dishCategory.setCreateTime(new Date());
+        dishCategory.setUpdateTime(new Date());
         return AjaxResult.success(dishCategoryService.save(dishCategory));
     }
     @PutMapping
     public AjaxResult updateDishCategory(@RequestBody DishCategory dishCategory) {
+        // 设置更新人为admin，时间为当前时间
+        dishCategory.setUpdateBy("admin");
+        dishCategory.setUpdateTime(new Date());
         return AjaxResult.success(dishCategoryService.updateById(dishCategory));
     }
     /**

@@ -8,6 +8,7 @@ import com.xmy.service.BoothService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -34,6 +35,9 @@ public class BoothController {
         }
         try {
             booth.setDbstatus(1);
+            // 设置更新人为admin，时间为当前时间
+            booth.setUpdateBy("admin");
+            booth.setUpdateTime(new Date());
             boothService.updateBooth(booth);
             return AjaxResult.success("修改成功");
         } catch (Exception e) {
@@ -45,6 +49,11 @@ public class BoothController {
     //新增卡座
     @PostMapping
     public AjaxResult addBooth(@RequestBody Booth booth) {
+        // 设置创建人和更新人为admin，时间为当前时间
+        booth.setCreateBy("admin");
+        booth.setUpdateBy("admin");
+        booth.setCreateTime(new Date());
+        booth.setUpdateTime(new Date());
         return AjaxResult.success(boothService.save(booth));
     }
     

@@ -7,6 +7,7 @@ import com.xmy.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -41,10 +42,18 @@ public class DishController extends BaseController {
     }
     @PostMapping
     public AjaxResult addDish(@RequestBody Dish dish) {
+        // 设置创建人和更新人为admin，时间为当前时间
+        dish.setCreateBy("admin");
+        dish.setUpdateBy("admin");
+        dish.setCreateTime(new Date());
+        dish.setUpdateTime(new Date());
         return AjaxResult.success(dishService.save(dish));
     }
     @PutMapping
     public AjaxResult updateDish(@RequestBody Dish dish) {
+        // 设置更新人为admin，时间为当前时间
+        dish.setUpdateBy("admin");
+        dish.setUpdateTime(new Date());
         return AjaxResult.success(dishService.updateById(dish));
     }
     @DeleteMapping("/{id}")
