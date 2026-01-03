@@ -5,7 +5,7 @@
       <div class="search-item">
         <label class="search-label">菜品名称</label>
         <el-input
-          v-model="queryParams.name"
+          v-model="queryParams.dishName"
           placeholder="请输入菜品名称"
           class="search-input"
           clearable
@@ -185,9 +185,24 @@ const getList = async () => {
 
 // 搜索方法
 const handleSearch = () => {
-  // 搜索时重置到第一页
-  queryParams.value.pageNum = 1
-  getList()
+  // 收集搜索参数
+  const searchParams = {}
+  Object.keys(queryParams.value).forEach(key => {
+    const value = queryParams.value[key]
+    // 过滤掉undefined、空字符串、null的值
+    if (value !== undefined && value !== '' && value !== null) {
+      searchParams[key] = value
+    }
+  })
+  
+  // 重置页码为1，保留原有的分页大小
+  queryParams.value = {
+    pageNum: 1,
+    pageSize: queryParams.value.pageSize,
+    ...searchParams // 合并搜索参数
+  }
+  
+  getList() // 重新获取列表数据
 }
 
 // 重置方法
