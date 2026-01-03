@@ -9,4 +9,5 @@ public class Dish extends BaseEntity {
     private String dishName;
     private BigDecimal dishPrice;
     private String dishImage;
+    private Integer salesStatus;
 }
