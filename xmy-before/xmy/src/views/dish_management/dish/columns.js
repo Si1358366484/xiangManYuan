@@ -6,7 +6,6 @@ export const tableColumns = [
     minWidth: 150,
     form: {
       type: 'input',
-      required: true,
       placeholder: '请输入菜品名称'
     }
   },
@@ -17,7 +16,6 @@ export const tableColumns = [
     type: 'category',
     form: {
       type: 'select',
-      required: true,
       placeholder: '请选择菜品分类'
     }
   },
@@ -28,7 +26,6 @@ export const tableColumns = [
     type: 'price',
     form: {
       type: 'input',
-      required: true,
       placeholder: '请输入菜品价格'
     }
   },
@@ -39,7 +36,6 @@ export const tableColumns = [
     type: 'status',
     form: {
       type: 'radio',
-      required: true,
       options: [
         { label: '启售', value: 1 },
         { label: '停售', value: 0 }

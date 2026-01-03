@@ -181,10 +181,10 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <span class="dialog-footer">
+      <div style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding: 10px 20px 20px;">
         <el-button @click="handleClose">取消</el-button>
         <el-button type="primary" @click="handleAdd">确定</el-button>
-      </span>
+      </div>
     </template>
   </el-dialog>
 </template>
@@ -405,7 +405,8 @@ const handleAdd = async () => {
     // 准备提交数据，将dishPrice转换为数字
     const submitData = {
       ...formData.value,
-      dishPrice: Number(formData.value.dishPrice)
+      dishPrice: Number(formData.value.dishPrice),
+      dbstatus: 1
     }
     // 调用新增API
     await addDish(submitData)
