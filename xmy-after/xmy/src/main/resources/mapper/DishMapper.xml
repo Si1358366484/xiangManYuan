@@ -11,6 +11,7 @@
         <result property="dishName" column="dish_name"/>
         <result property="dishPrice" column="dish_price"/>
         <result property="dishImage" column="dish_image"/>
+        <result property="salesStatus" column="sales_status"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
@@ -26,6 +27,7 @@
         <if test="categoryId != null">and d.category_id = #{categoryId}</if>
         <if test="dishName != null and dishName != ''">and d.dish_name like CONCAT('%',#{dishName},'%')</if>
         <if test="dishPrice != null">and CAST(d.dish_price AS CHAR) like CONCAT('%',#{dishPrice},'%')</if>
+        <if test="salesStatus != null">and d.sales_status = #{salesStatus}</if>
         <if test="dbstatus != null">and d.dbstatus = #{dbstatus}</if>
     </sql>
     <sql id="orderClause">

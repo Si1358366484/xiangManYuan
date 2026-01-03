@@ -18,7 +18,7 @@ export const tableColumns = [
     type: 'price'
   },
   {
-    prop: 'dbstatus',
+    prop: 'salesStatus',
     label: '售卖状态',
     minWidth: 120,
     type: 'status'
