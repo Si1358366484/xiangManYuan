@@ -36,7 +36,7 @@
     
     <!-- 按钮操作区域 -->
     <div class="button-group">
-      <el-button type="primary" plain>
+      <el-button type="primary" plain @click="handleAddClick">
         <el-icon><Plus /></el-icon> 新增
       </el-button>
       <el-button type="success" plain :disabled="multipleSelection.length !== 1">
@@ -118,12 +118,81 @@
       </div>
     </div>
   </div>
+
+  <!-- 新增菜品弹窗 -->
+  <el-dialog
+    v-model="dialogVisible"
+    title="新增菜品"
+    width="500px"
+    :before-close="handleClose"
+  >
+    <el-form
+      :model="formData"
+      label-position="left"
+      label-width="100px"
+    >
+      <el-form-item
+        v-for="column in formColumns"
+        :key="column.prop"
+        :label="column.label"
+        :required="column.form?.required"
+      >
+        <!-- 输入框类型 -->
+        <el-input
+          v-if="column.form?.type === 'input'"
+          v-model="formData[column.prop]"
+          :placeholder="column.form?.placeholder"
+          :maxlength="column.form?.maxlength"
+          show-word-limit
+          style="width: 100%"
+        />
+        
+        <!-- 下拉选择类型 -->
+        <el-select
+          v-else-if="column.form?.type === 'select'"
+          v-model="formData[column.prop]"
+          :placeholder="column.form?.placeholder"
+          style="width: 100%"
+        >
+          <!-- 菜品分类选项 -->
+          <template v-if="column.type === 'category'">
+            <el-option
+              v-for="(categoryName, categoryId) in categoryDict"
+              :key="categoryId"
+              :label="categoryName"
+              :value="categoryId.toString()"
+            />
+          </template>
+        </el-select>
+        
+        <!-- 单选按钮类型 -->
+        <el-radio-group
+          v-else-if="column.form?.type === 'radio'"
+          v-model="formData[column.prop]"
+        >
+          <el-radio
+            v-for="option in column.form?.options"
+            :key="option.value"
+            :label="option.value"
+          >
+            {{ option.label }}
+          </el-radio>
+        </el-radio-group>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="handleClose">取消</el-button>
+        <el-button type="primary" @click="handleAdd">确定</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { Plus, Edit, Delete, RefreshRight } from '@element-plus/icons-vue'
-import { getDishList, getDishCategoryList, deleteDish, updateDish } from '@/api/dish'
+import { getDishList, getDishCategoryList, deleteDish, updateDish, addDish } from '@/api/dish'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { tableColumns } from './columns'
 import { createDict, getDictValue } from '@/utils/dict'
@@ -149,6 +218,21 @@ const selectedDish = ref(null)
 const categoryData = ref([])
 // 菜品分类字典
 const categoryDict = ref({})
+
+// 新增弹窗相关数据
+const dialogVisible = ref(false)
+// 表单数据
+const formData = ref({
+  dishName: '',
+  categoryId: '',
+  dishPrice: '',
+  salesStatus: 1
+})
+
+// 计算属性：过滤出非隐藏的表单字段
+const formColumns = computed(() => {
+  return tableColumns.filter(column => column.form?.type !== 'hidden')
+})
 
 // 获取菜品分类数据
 const getCategoryList = async () => {
@@ -293,6 +377,46 @@ const handleStatusChange = async () => {
     ElMessage.success('状态切换成功')
   } catch (error) {
     ElMessage.error('状态切换失败: ' + error)
+  }
+}
+
+// 打开新增弹窗
+const handleAddClick = () => {
+  // 重置表单数据
+  formData.value = {
+    dishName: '',
+    categoryId: '',
+    dishPrice: '',
+    salesStatus: 1
+  }
+  // 显示弹窗
+  dialogVisible.value = true
+}
+
+// 关闭弹窗
+const handleClose = () => {
+  // 隐藏弹窗
+  dialogVisible.value = false
+}
+
+// 新增菜品
+const handleAdd = async () => {
+  try {
+    // 准备提交数据，将dishPrice转换为数字
+    const submitData = {
+      ...formData.value,
+      dishPrice: Number(formData.value.dishPrice)
+    }
+    // 调用新增API
+    await addDish(submitData)
+    // 关闭弹窗
+    dialogVisible.value = false
+    // 刷新列表
+    getList()
+    // 显示成功消息
+    ElMessage.success('新增菜品成功')
+  } catch (error) {
+    ElMessage.error('新增菜品失败: ' + error)
   }
 }
 

@@ -43,3 +43,12 @@ export const updateDish = (data) => {
     data: data
   })
 }
+
+// 新增菜品
+export const addDish = (data) => {
+  return request({
+    url: '/xmy/dish',
+    method: 'post',
+    data: data
+  })
+}
