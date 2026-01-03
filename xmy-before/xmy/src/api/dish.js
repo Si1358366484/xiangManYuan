@@ -25,3 +25,12 @@ export const getDishListAll = (params) => {
     params
   })
 }
+
+// 删除菜品
+export function deleteDish(ids) {
+  const idString = Array.isArray(ids) ? ids.join(',') : ids
+  return request({
+    url: "/xmy/dish/" + idString,
+    method: "delete",
+  });
+}

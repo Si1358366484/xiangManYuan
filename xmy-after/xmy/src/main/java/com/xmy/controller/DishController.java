@@ -56,10 +56,6 @@ public class DishController extends BaseController {
         dish.setUpdateTime(new Date());
         return AjaxResult.success(dishService.updateById(dish));
     }
-    @DeleteMapping("/{id}")
-    public AjaxResult deleteDish(@PathVariable Long id) {
-        return AjaxResult.success(dishService.removeById(id));
-    }
     /**
      * 批量逻辑删除dish
      */

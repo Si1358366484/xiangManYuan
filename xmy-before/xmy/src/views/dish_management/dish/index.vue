@@ -42,7 +42,7 @@
       <el-button type="success" plain :disabled="multipleSelection.length !== 1">
         <el-icon><Edit /></el-icon> 修改
       </el-button>
-      <el-button type="danger" plain :disabled="multipleSelection.length === 0">
+      <el-button type="danger" plain :disabled="multipleSelection.length === 0" @click="handleDelete">
         <el-icon><Delete /></el-icon> {{ multipleSelection.length > 1 ? '批量删除' : '删除' }}
       </el-button>
       <el-button type="warning" plain :disabled="multipleSelection.length !== 1">
@@ -123,8 +123,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Plus, Edit, Delete, RefreshRight } from '@element-plus/icons-vue'
-import { getDishList, getDishCategoryList } from '@/api/dish'
-import { ElMessage } from 'element-plus'
+import { getDishList, getDishCategoryList, deleteDish } from '@/api/dish'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { tableColumns } from './columns'
 import { createDict, getDictValue } from '@/utils/dict'
 
@@ -238,6 +238,39 @@ const handleRowClick = (row) => {
 const handleSelectionChange = (selection) => {
   multipleSelection.value = selection
   selectedDish.value = selection.length > 0 ? selection[selection.length - 1] : null
+}
+
+// 删除处理函数
+const handleDelete = async () => {
+  // 构建确认消息
+  const isBatch = multipleSelection.value.length > 1
+  const confirmMessage = isBatch 
+    ? `确定要删除选中的 ${multipleSelection.value.length} 个菜品吗？`
+    : `确定要删除菜品【${multipleSelection.value[0].dishName}】吗？`
+  try {
+    // 显示确认对话框
+    await ElMessageBox.confirm(confirmMessage, '删除确认', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'error'
+    })
+    // 构建删除ID数组
+    const ids = multipleSelection.value.map(item => item.id)
+    
+    // 调用删除API
+    await deleteDish(ids)
+    
+    // 刷新列表
+    getList()
+    
+    // 显示成功消息
+    ElMessage.success(isBatch ? '批量删除成功' : '删除成功')
+  } catch (error) {
+    // 如果是用户取消操作，不显示错误消息
+    if (error !== 'cancel') {
+      ElMessage.error('删除失败: ' + error)
+    }
+  }
 }
 
 // 页面挂载时获取数据
