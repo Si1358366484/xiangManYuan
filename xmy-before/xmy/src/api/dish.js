@@ -34,3 +34,12 @@ export function deleteDish(ids) {
     method: "delete",
   });
 }
+
+// 更新菜品
+export const updateDish = (data) => {
+  return request({
+    url: '/xmy/dish',
+    method: 'put',
+    data: data
+  })
+}

@@ -45,7 +45,7 @@
       <el-button type="danger" plain :disabled="multipleSelection.length === 0" @click="handleDelete">
         <el-icon><Delete /></el-icon> {{ multipleSelection.length > 1 ? '批量删除' : '删除' }}
       </el-button>
-      <el-button type="warning" plain :disabled="multipleSelection.length !== 1">
+      <el-button type="warning" plain :disabled="multipleSelection.length !== 1" @click="handleStatusChange">
         <el-icon><RefreshRight /></el-icon> 状态切换
       </el-button>
     </div>
@@ -123,7 +123,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Plus, Edit, Delete, RefreshRight } from '@element-plus/icons-vue'
-import { getDishList, getDishCategoryList, deleteDish } from '@/api/dish'
+import { getDishList, getDishCategoryList, deleteDish, updateDish } from '@/api/dish'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { tableColumns } from './columns'
 import { createDict, getDictValue } from '@/utils/dict'
@@ -270,6 +270,29 @@ const handleDelete = async () => {
     if (error !== 'cancel') {
       ElMessage.error('删除失败: ' + error)
     }
+  }
+}
+
+// 状态切换处理函数
+const handleStatusChange = async () => {
+  try {
+    // 获取当前选中的菜品
+    const selectedDish = multipleSelection.value[0]
+    // 切换状态
+    const newStatus = selectedDish.salesStatus === 1 ? 0 : 1
+    // 构建更新数据
+    const updateData = {
+      id: selectedDish.id,
+      salesStatus: newStatus
+    }
+    // 调用更新API
+    await updateDish(updateData)
+    // 刷新列表
+    getList()
+    // 显示成功消息
+    ElMessage.success('状态切换成功')
+  } catch (error) {
+    ElMessage.error('状态切换失败: ' + error)
   }
 }
 

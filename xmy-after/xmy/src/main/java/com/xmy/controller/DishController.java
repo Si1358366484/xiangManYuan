@@ -74,4 +74,7 @@ public class DishController extends BaseController {
         // 返回成功结果
         return AjaxResult.success("删除成功，共删除 " + deletedCount + " 条记录");
     }
+
+    // ==================== 特殊处理逻辑 ====================
+    
 }
