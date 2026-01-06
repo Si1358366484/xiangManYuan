@@ -15,16 +15,16 @@
       <div class="search-item">
         <label class="search-label">菜品分类</label>
         <el-select
-          v-model="queryParams.categoryId"
+          v-model="queryParams.categoryValue"
           placeholder="请选择菜品分类"
           class="search-input"
           clearable
         >
           <el-option
-            v-for="(categoryName, categoryId) in categoryDict"
-            :key="categoryId"
+            v-for="(categoryName, categoryValue) in categoryDict"
+            :key="categoryValue"
             :label="categoryName"
-            :value="categoryId.toString()"
+            :value="categoryValue.toString()"
           />
         </el-select>
       </div>
@@ -155,14 +155,14 @@
           style="width: 100%"
         >
           <!-- 菜品分类选项 -->
-          <template v-if="column.type === 'category'">
-            <el-option
-              v-for="(categoryName, categoryId) in categoryDict"
-              :key="categoryId"
-              :label="categoryName"
-              :value="categoryId.toString()"
-            />
-          </template>
+        <template v-if="column.type === 'category'">
+          <el-option
+            v-for="(categoryName, categoryValue) in categoryDict"
+            :key="categoryValue"
+            :label="categoryName"
+            :value="categoryValue.toString()"
+          />
+        </template>
         </el-select>
         
         <!-- 单选按钮类型 -->
@@ -226,7 +226,7 @@ const dialogMode = ref('add')
 // 表单数据
 const formData = ref({
   dishName: '',
-  categoryId: '',
+  categoryValue: '',
   dishPrice: '',
   salesStatus: 1
 })
@@ -242,8 +242,8 @@ const getCategoryList = async () => {
     const response = await getDishCategoryList()
     // 从 response.data 中获取分类数组
     categoryData.value = response.data
-    // 创建分类字典，使用 id 作为键字段
-    categoryDict.value = createDict(categoryData.value, 'id', 'categoryName')
+    // 创建分类字典，使用 categoryValue 作为键字段
+    categoryDict.value = createDict(categoryData.value, 'categoryValue', 'categoryName')
   } catch (error) {
     ElMessage.error('获取菜品分类失败: ' + error)
     categoryData.value = []
@@ -389,7 +389,7 @@ const handleAddClick = () => {
   // 重置表单数据
   formData.value = {
     dishName: '',
-    categoryId: '',
+    categoryValue: '',
     dishPrice: '',
     salesStatus: 1
   }
@@ -408,7 +408,7 @@ const handleEditClick = () => {
     formData.value = {
       ...selectedDish,
       dishPrice: selectedDish.dishPrice.toString(),
-      categoryId: selectedDish.categoryId.toString()
+      categoryValue: selectedDish.categoryValue.toString()
     }
     // 显示弹窗
     dialogVisible.value = true

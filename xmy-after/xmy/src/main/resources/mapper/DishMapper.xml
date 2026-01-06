@@ -7,7 +7,7 @@
 
     <resultMap id="DishResultMap" type="com.xmy.domain.entity.Dish">
         <id property="id" column="id"/>
-        <result property="categoryId" column="category_id"/>
+        <result property="categoryValue" column="category_value"/>
         <result property="dishName" column="dish_name"/>
         <result property="dishPrice" column="dish_price"/>
         <result property="dishImage" column="dish_image"/>
@@ -24,7 +24,7 @@
     </sql>
     <!--    通用过滤sql-->
     <sql id="whereClause">
-        <if test="categoryId != null">and d.category_id = #{categoryId}</if>
+        <if test="categoryValue != null">and d.category_value = #{categoryValue}</if>
         <if test="dishName != null and dishName != ''">and d.dish_name like CONCAT('%',#{dishName},'%')</if>
         <if test="dishPrice != null">and CAST(d.dish_price AS CHAR) like CONCAT('%',#{dishPrice},'%')</if>
         <if test="salesStatus != null">and d.sales_status = #{salesStatus}</if>

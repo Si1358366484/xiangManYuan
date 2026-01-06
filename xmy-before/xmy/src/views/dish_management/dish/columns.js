@@ -10,7 +10,7 @@ export const tableColumns = [
     }
   },
   {
-    prop: 'categoryId',
+    prop: 'categoryValue',
     label: '菜品分类',
     minWidth: 120,
     type: 'category',
