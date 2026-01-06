@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 @Data
 public class Dish extends BaseEntity {
-    private Long categoryId;
+    private String categoryValue;
     private String dishName;
     private BigDecimal dishPrice;
     private String dishImage;
