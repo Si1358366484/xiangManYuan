@@ -7,14 +7,53 @@
         <h3>香满园火锅店</h3>
       </div>
       <div class="menu-items">
-        <router-link 
+        <!-- 菜单项渲染 -->
+        <div 
           v-for="item in menuItems" 
           :key="item.path"
-          :to="item.path"
-          :class="['menu-item', { active: $route.path === item.path }]"
+          class="menu-item-wrapper"
         >
-          {{ item.label }}
-        </router-link>
+          <!-- 有子菜单的项 -->
+          <div 
+            v-if="item.children && item.children.length > 0"
+            class="parent-menu-item"
+          >
+            <div 
+              class="parent-menu-header"
+              @click="toggleSubMenu(item.path)"
+            >
+              <span class="menu-label">{{ item.label }}</span>
+              <span 
+                class="expand-icon"
+                :class="{ rotated: isMenuExpanded(item.path) }"
+              >
+                ▶
+              </span>
+            </div>
+            <!-- 子菜单 -->
+            <div 
+              class="sub-menu-items"
+              v-show="isMenuExpanded(item.path)"
+            >
+              <router-link 
+                v-for="child in item.children" 
+                :key="child.path"
+                :to="child.path"
+                :class="['sub-menu-item', { active: $route.path === child.path }]"
+              >
+                {{ child.label }}
+              </router-link>
+            </div>
+          </div>
+          <!-- 无子菜单的项 -->
+          <router-link 
+            v-else
+            :to="item.path"
+            :class="['menu-item', { active: $route.path === item.path }]"
+          >
+            {{ item.label }}
+          </router-link>
+        </div>
       </div>
     </div>
 
@@ -142,18 +181,53 @@ provide('searchKeyword', searchKeyword)
 // 菜单项配置
 const menuItems = ref([
   { label: '首页', path: '/home' },
-  { label: '菜品管理', path: '/dish_management' }
+  {
+    label: '菜品管理', 
+    path: '/dish_management',
+    children: [
+      { label: '菜品', path: '/dish_management/dish' },
+      { label: '菜品口味', path: '/dish_management/dishCategory' }
+    ]
+  }
   // 后续可以添加更多菜单项
 ])
+
+// 展开的菜单列表
+const expandedMenus = ref(['/dish_management'])
+
+// 切换菜单展开/折叠
+const toggleSubMenu = (menuPath) => {
+  const index = expandedMenus.value.indexOf(menuPath)
+  if (index > -1) {
+    expandedMenus.value.splice(index, 1)
+  } else {
+    expandedMenus.value.push(menuPath)
+  }
+}
+
+// 检查菜单是否展开
+const isMenuExpanded = (menuPath) => {
+  return expandedMenus.value.includes(menuPath)
+}
 
 // 切换菜单显示/隐藏
 const toggleMenu = () => {
   isMenuCollapsed.value = !isMenuCollapsed.value
 }
 
-// 获取当前选中的菜单项标签
+// 获取当前选中的菜单项标签（TODO）
 const currentMenuLabel = computed(() => {
-  const currentItem = menuItems.value.find(item => item.path === route.path)
+  // 先查找子菜单项
+  for (const menu of menuItems.value) {
+    if (menu.children && menu.children.length > 0) {
+      const matchedChild = menu.children.find(child => route.path === child.path)
+      if (matchedChild) {
+        return matchedChild.label
+      }
+    }
+  }
+  // 如果没有匹配到子菜单项，查找父菜单项
+  const currentItem = menuItems.value.find(item => route.path === item.path)
   return currentItem ? currentItem.label : ""
 })
 
@@ -270,6 +344,75 @@ watch(() => route.path, () => {
   background-color: #3a3a3a;
   color: #ffd700;
   font-weight: 600;
+}
+
+/* 父菜单项样式 */
+.parent-menu-item {
+  width: 100%;
+}
+
+.parent-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  text-align: left;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 0;
+  background-color: transparent;
+  margin-bottom: 0;
+  text-decoration: none;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 展开图标样式 */
+.expand-icon {
+  font-size: 12px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.expand-icon.rotated {
+  transform: rotate(90deg);
+}
+
+/* 子菜单样式 */
+.sub-menu-items {
+  background-color: rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.sub-menu-item {
+  display: block;
+  padding: 10px 20px 10px 40px;
+  text-align: left;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 0;
+  transition: all 0.3s ease;
+  background-color: transparent;
+  margin-bottom: 0;
+  text-decoration: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sub-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding-left: 45px;
+}
+
+.sub-menu-item.active {
+  background-color: #3a3a3a;
+  color: #ffd700;
+  font-weight: 500;
+  padding-left: 45px;
 }
 
 /* 右侧内容包装器 */
