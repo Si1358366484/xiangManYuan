@@ -13,9 +13,15 @@
                     </div>
                     <!-- 操作按钮 -->
                     <div>
-                        <button class="add-dish-btn">加菜</button>
-                        <button>下单并结账</button>
-                        <button>下单</button>
+                        <!-- 当显示加菜视图时，显示下单和下单并结账按钮 -->
+                        <template v-if="currentView === 'dish'">
+                            <button @click="handleOrder">下单</button>
+                            <button @click="handlePayBill">下单并结账</button>
+                        </template>
+                        <!-- 当显示结账视图时，显示加菜按钮 -->
+                        <template v-else>
+                            <button class="add-dish-btn" @click="handleAddDish">加菜</button>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -25,16 +31,34 @@
         </div>
         <!-- 右侧区域 -->
         <div class="right-area">
-            <!-- <DishComponent /> -->
-            <PayBillComponent />
+            <DishComponent v-if="currentView === 'dish'" />
+            <PayBillComponent v-if="currentView === 'pay'" />
         </div>
     </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 // 导入dish组件
 import DishComponent from '@/components/dish/dish.vue'
 import PayBillComponent from '@/components/payBill/index.vue'
+
+// 当前显示的视图类型：'dish'表示加菜视图，'pay'表示结账视图
+const currentView = ref('dish')
+
+// 处理按钮点击事件
+const handleAddDish = () => {
+  currentView.value = 'dish'
+}
+
+const handlePayBill = () => {
+  currentView.value = 'pay'
+}
+
+const handleOrder = () => {
+  // 下单逻辑
+  console.log('下单')
+}
 </script>
 
 <style scoped>
