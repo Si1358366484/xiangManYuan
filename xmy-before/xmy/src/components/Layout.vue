@@ -23,12 +23,6 @@
               @click="toggleSubMenu(item.path)"
             >
               <span class="menu-label">{{ item.label }}</span>
-              <span 
-                class="expand-icon"
-                :class="{ rotated: isMenuExpanded(item.path) }"
-              >
-                ▶
-              </span>
             </div>
             <!-- 子菜单 -->
             <div 
@@ -369,16 +363,7 @@ watch(() => route.path, () => {
   box-sizing: border-box;
 }
 
-/* 展开图标样式 */
-.expand-icon {
-  font-size: 12px;
-  transition: transform 0.3s ease;
-  display: inline-block;
-}
 
-.expand-icon.rotated {
-  transform: rotate(90deg);
-}
 
 /* 子菜单样式 */
 .sub-menu-items {

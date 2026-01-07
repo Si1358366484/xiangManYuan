@@ -2,11 +2,31 @@
     <div class="bill-container">
         <!-- 左侧区域 -->
         <div class="left-area">
-            区域1
+            <div class="left-area-left">
+                <div class="left-area-left-top">订单详情</div>
+                <div class="left-area-left-bottom">
+                    <!-- 统计信息 -->
+                    <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <span>共 3 项， 15 份</span>
+                        <span style="font-size: 24px; font-weight: bold;">¥128</span>
+                        <span style="font-size: 12px; text-decoration: line-through; color: #999;">¥133</span>
+                    </div>
+                    <!-- 操作按钮 -->
+                    <div>
+                        <button class="add-dish-btn">加菜</button>
+                        <button>下单并结账</button>
+                        <button>下单</button>
+                    </div>
+                </div>
+            </div>
+            <div class="left-area-right">
+                <h3>按钮区域</h3>
+            </div>
         </div>
         <!-- 右侧区域 -->
         <div class="right-area">
-            <DishComponent />
+            <!-- <DishComponent /> -->
+            <PayBillComponent />
         </div>
     </div>
 </template>
@@ -14,6 +34,7 @@
 <script setup>
 // 导入dish组件
 import DishComponent from '@/components/dish/dish.vue'
+import PayBillComponent from '@/components/payBill/index.vue'
 </script>
 
 <style scoped>
@@ -28,13 +49,68 @@ import DishComponent from '@/components/dish/dish.vue'
 
 .left-area {
     width: 30%;
-    background-color: white;
     border-radius: 0 8px 8px 0;
-    margin-right: 3px;
-    padding: 20px;
-    box-sizing: border-box;
+    background-color: white;
+    display: flex;
+    overflow: hidden;
 }
 
+/* 左侧内部区域 - 垂直排列 */
+.left-area-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 订单详情区域 - 自适应高度 */
+.left-area-left-top {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/* 结算区域 - 底部固定 */
+.left-area-left-bottom {
+    padding: 5px 10px 20px 10px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #eee;
+}
+
+/* 结算区域内的div样式 */
+.left-area-left-bottom > div {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* 结算区域内的最后一个div（按钮容器） */
+.left-area-left-bottom > div:last-child {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0;
+}
+
+/* 按钮样式 */
+.left-area-left-bottom button {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #333;
+}
+
+/* 右侧按钮区域 */
+.left-area-right {
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #eee;
+}
+
+/* 右侧区域 */
 .right-area {
     width: 70%;
     background-color: #2A2A2A;
